@@ -1,5 +1,7 @@
 # Project Advisor
 
+**English** · [Português (Brasil)](.github/readme/README.pt-BR.md)
+
 A platform-independent skill for critical project guidance, focused worker prompts, and evidence-based review.
 
 Use one chat to decide what is worth doing next and another agent to investigate, implement, and verify. The advisor challenges weak assumptions, recommends a proportionate process, and evaluates results. You retain decisions about goals, priorities, and preferences.
@@ -116,6 +118,8 @@ skills/project-advisor/
 ## Contributing
 
 Describe a real problem, the expected behavior, and why the proposed change helps without adding unnecessary process. Use synthetic examples, remove private information, and report the environment and limitations of any behavioral checks. Improvements should preserve the distinction between reusable guidance and personal or project-specific preferences.
+
+README translations live in `.github/readme/`. Keep their examples, commands, links, and limitations aligned with the English README when updating documentation. Add language navigation links only for translations included in the repository.
 
 ## License
 
