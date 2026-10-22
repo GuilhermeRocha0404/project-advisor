@@ -1,0 +1,11 @@
+# Private state and local settings do not belong in the skill distribution.
+**/ADVISOR_STATE.md
+**/ADVISOR_STATE_TEMPLATE.md
+**/CONSULTOR_STATE.md
+**/CONSULTOR_STATE_TEMPLATE.md
+.env
+.env.*
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
