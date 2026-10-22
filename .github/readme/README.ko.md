@@ -26,62 +26,24 @@
 
 ## 권장 설정
 
-**자문자는 별도 채팅과 대상 프로젝트 디렉터리 트리 밖의 별도 작업 공간에서 사용하세요.** 구현 담당은 프로젝트 작업 공간에서 적용되는 지침을 따릅니다. 같은 프로젝트에 연결된 다른 채팅은 여전히 `AGENTS.md`, `CLAUDE.md` 또는 로컬 규칙을 불러올 수 있습니다.
-
-이 설정은 프로젝트 전용 지침이 자문자 문맥에 자동으로 들어오는 일을 줄입니다. 전역 규칙, 상위 디렉터리 지침, 연동, 상속된 문맥은 적용될 수 있으므로 완전한 격리를 보장하지 않습니다. 목표, 선택한 문서, 구현 담당의 보고로 필요한 배경을 제공하세요. 자문자는 환경의 지침 우선순위를 존중하면서 프로젝트 규칙을 분석 자료로 읽을 수 있습니다.
-
-프로젝트별 자문 상태는 설치된 skill 밖, 가능하면 프로젝트 저장소 밖의 별도 외부 폴더에 보관하세요. 비공개 상태를 skill과 함께 공개하지 마세요.
+프로젝트마다 대상 저장소 밖에 전용 자문 폴더와 채팅을 만드세요. 다른 프로젝트에는 새 폴더와 새 상태를 사용합니다. 구현 담당은 대상 저장소에서 작업합니다. 전역 및 상위 폴더 지침은 여전히 적용될 수 있습니다.
 
 ## 설치
 
-저장소를 복제하거나 내려받고 `skills/project-advisor` 폴더 전체를 적절한 위치에 복사하세요. `SKILL.md` 옆의 `references/`와 `agents/`를 유지하세요. 기존 설치를 덮어쓰기 전에 로컬 변경 사항을 검토하세요.
+`skills/project-advisor` 전체와 하위 폴더를 해당 환경의 개인 스킬 디렉터리에 복사하세요. Python 3.10+로 설정을 미리 보고, 차이를 검토한 뒤 `--apply`를 추가해 실행하세요. 예제 경로를 바꾸고 `codex`, `claude`, `opencode` 중 하나를 선택하세요.
 
-| 환경 | 개인 설치 폴더 | 명시적 호출 |
-|---|---|---|
-| Codex | `~/.agents/skills/project-advisor/` | `$project-advisor` |
-| Claude Code | `~/.claude/skills/project-advisor/` | `/project-advisor` |
-| OpenCode | `~/.config/opencode/skills/project-advisor/` | skill을 명시적으로 선택하거나 불러오세요. 선택적 명령 설정은 아래를 참조하세요. |
+```sh
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex --apply
+```
 
-`~`는 Windows에서도 사용자 홈 디렉터리를 뜻합니다. 이 경로는 로컬 도구용이며 호스팅 제품의 방식은 다를 수 있습니다. 설치 후 보이지 않으면 새 자문 세션을 여세요.
+Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `project-advisor`
 
-### 호출 제어
-
-핵심 지침은 항상 명시적 활성화 요청을 요구합니다. 환경 수준의 제어는 별도로 설정합니다.
-
-- **Codex:** 포함된 `agents/openai.yaml`은 `policy.allow_implicit_invocation: false`를 설정합니다.
-- **Claude Code:** 모델이 스스로 호출하지 못하도록 설치된 `SKILL.md`의 YAML frontmatter에 `disable-model-invocation: true`를 추가하세요. 이는 Claude Code용 조정이며 공통 원본의 일부가 아닙니다.
-- **OpenCode:** 명령을 제공하고 자동 선택 안내에서 제외하려면 설치된 `SKILL.md`의 frontmatter에 다음 문자열 메타데이터를 추가하세요.
-
-  ```yaml
-  metadata:
-    opencode/slash: "true"
-    opencode/autoinvoke: "false"
-  ```
-
-  이 설정을 지원하는 버전에서 `/project-advisor`를 호출하세요. 클라이언트가 다르면 해당 환경의 명시적 skill 로딩 방식을 사용하세요.
-
-이는 로컬 설치 조정이므로 저장소에 방법론의 별도 사본을 만들 필요가 없습니다. 업데이트 전에 환경 전용 frontmatter 설정을 보존하세요.
-
-설치 및 호출 안내는 2026년 10월 21일 [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills), [OpenCode](https://opencode.ai/docs/skills/) 공식 문서와 대조했습니다. **이 버전을 세 클라이언트 모두에서 처음부터 끝까지 실행 검증한 것은 아닙니다.** 문서 확인은 실행 호환성 인증이 아닙니다. 이전 포르투갈어 자문자의 사용 경험이 이 버전에 반영되었으며 영어판에는 더 폭넓은 실제 사용 의견이 필요합니다.
+[Codex / Claude Code / OpenCode — setup, updates, migration](../../skills/project-advisor/references/HARNESSES.md)
 
 ## 활성화와 사용
 
-환경에서 제공하는 방식으로 skill을 호출하고 목표와 상태 폴더를 알려주세요. 예:
-
-```text
-Project Advisor를 활성화하세요.
-외부 상태 폴더로 /path/to/my-advisor-workspace를 사용하세요.
-구현 담당은 별도 채팅에 있습니다.
-기존 애플리케이션에 CSV 고객 가져오기를 추가하고 싶습니다.
-```
-
-자문자는 핵심 지침과 외부 상태를 읽거나 필요하면 상태를 만듭니다. 같은 채팅에서는 명시적으로 비활성화할 때까지 유지됩니다.
-
-```text
-자문자를 비활성화하세요.
-```
-
-새 채팅에서는 skill을 다시 활성화하고 같은 상태 폴더를 알려 프로젝트를 이어가세요. 설치만으로 역할이 활성화되지 않습니다. skill의 지침과 예시는 영어지만 **자문자는 사용자가 선호하는 언어로 소통합니다**.
+준비된 폴더에서 새 채팅을 여세요. 로컬 지침이 로드되면 연결된 프로젝트의 자문 역할이 시작됩니다. 스킬 설치만으로 다른 채팅이 활성화되지는 않습니다. 역할, 프로젝트, 상태, 다음 작업을 확인하세요. 명시적 비활성화는 현재 채팅에 적용되며, 새 채팅은 다시 자문 역할로 시작합니다. 답변은 선호 언어를 따릅니다.
 
 ## 자문자가 하는 일
 
@@ -96,23 +58,21 @@ Project Advisor를 활성화하세요.
 
 ## 상태, 개인정보, 한계
 
-자문자는 외부 작업 공간의 `ADVISOR_STATE.md`를 사용합니다. 새 상태를 만들 때 기존 `ADVISOR_STATE_TEMPLATE.md`가 포함된 대체 스키마보다 우선합니다. `STATE_SCHEMA.md`에는 일반적인 입력란만 있습니다.
-
-상태에는 민감한 결정, 경로, 프로젝트 정보가 포함될 수 있습니다. 저장 위치와 공유 대상을 신중하게 정하세요. `.gitignore`는 상태 파일명을 제외하지만 이 체크아웃 안에서만 적용되고 이미 추적되는 파일을 제거하지는 않습니다. 비공개 상태는 공개할 저장소 밖에 보관하는 편이 좋습니다.
-
-상태는 중요한 정보가 바뀐 활성 응답 중, 작업 종료 시, 문맥 압축 후 재개 시 등에 필요에 따라 정리됩니다. 백그라운드 프로세스나 세션 hook은 없고 활성화 문맥이 사라졌을 때 복구를 보장하지 않습니다. 필요하면 같은 폴더로 다시 활성화하세요. 파일 접근이 불가능하면 저장했다고 주장하는 대신 사용자가 저장할 인계 요약을 제공할 수 있습니다.
-
-skill은 지침을 제공하며 접근 제어나 올바른 판단을 보장하지 않습니다. 동작은 모델, 이용 가능한 근거, 환경 지침, 도구에 따라 달라집니다. 대상 프로젝트를 구현하거나 독자적으로 구현 담당에게 연락하지 않습니다.
+`AGENTS.md`에 방법론이 있으며 필요할 때 `CLAUDE.md`가 가져옵니다. `.advisor-workspace.json`은 프로젝트, 환경, 버전, 해시를 기록합니다. 비공개 상태는 `ADVISOR_STATE.md`에 두며 기존 `CONSULTOR_STATE.md`를 유지할 수 있습니다. `--adopt-existing-state` 전에 상태를 읽으세요. 개인 설정은 `ADVISOR_LOCAL.md`에 둡니다. 업데이트는 차이를 표시하고 수정된 지침의 덮어쓰기를 거부하므로 명시적으로 검토하고 병합해야 합니다. 기존 상태는 보존됩니다. 훅이나 백그라운드 서비스는 없습니다. 설치 프로그램 테스트가 모든 클라이언트의 동작을 인증하지는 않습니다.
 
 ## 저장소 구조
 
+템플릿은 배포 방법론의 유일한 원본이며 각 작업 폴더는 버전이 있는 사본을 받습니다. 별도 CORE는 없습니다. 스킬 업데이트가 작업 폴더를 자동으로 바꾸지 않습니다. 비공개 상태와 설정을 공개하지 마세요.
+
 ```text
 skills/project-advisor/
-├── SKILL.md                   활성화, 상태, 연속성
-├── agents/openai.yaml         Codex 전용 호출 정책
+├── SKILL.md
+├── templates/AGENTS.md
+├── scripts/workspace.py
+├── agents/openai.yaml
 └── references/
-    ├── ADVISOR_CORE.md        플랫폼 독립적 방법
-    └── STATE_SCHEMA.md        상태 복구 구조
+    ├── HARNESSES.md
+    └── STATE_SCHEMA.md
 ```
 
 ## 기여

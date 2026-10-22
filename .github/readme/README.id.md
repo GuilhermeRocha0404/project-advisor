@@ -26,62 +26,24 @@ Ini contoh, bukan urutan wajib. Tugas yang jelas dapat langsung dilaksanakan; pe
 
 ## Pengaturan yang disarankan
 
-Gunakan **percakapan dan ruang kerja penasihat yang terpisah, di luar pohon direktori proyek tujuan**. Agen pelaksana tetap berada di ruang kerja proyek dan mengikuti instruksi yang berlaku. Percakapan lain yang masih terkait dengan proyek yang sama tetap dapat memuat `AGENTS.md`, `CLAUDE.md`, atau aturan lokal lain.
-
-Pengaturan ini mengurangi pemuatan otomatis instruksi khusus proyek ke konteks penasihat. Aturan global, instruksi direktori induk, integrasi, dan konteks warisan masih dapat berlaku; isolasi penuh tidak dijamin. Berikan konteks melalui tujuan, dokumen terpilih, dan laporan agen. Penasihat dapat memeriksa aturan proyek sebagai bukti sambil menghormati hierarki instruksi lingkungan.
-
-Simpan status penasihat setiap proyek dalam folder eksternal tersendiri, di luar skill terpasang dan sebaiknya di luar repositori proyek. Jangan terbitkan status pribadi bersama skill.
+Gunakan satu folder dan chat penasihat khusus untuk setiap proyek, di luar repositori sasaran. Proyek lain mendapat folder dan status baru. Agen pelaksana tetap berada di repositori. Instruksi global dan folder induk masih dapat berlaku.
 
 ## Instalasi
 
-Klon atau unduh repositori ini, lalu salin seluruh folder `skills/project-advisor` ke lokasi yang sesuai. Pertahankan `references/` dan `agents/` di samping `SKILL.md`. Tinjau perubahan lokal sebelum menimpa instalasi yang ada.
+Salin seluruh folder `skills/project-advisor` beserta subfoldernya ke direktori skill pribadi lingkungan Anda. Gunakan Python 3.10+ untuk melihat pratinjau, lalu ulangi dengan `--apply` setelah meninjau perbedaannya. Ganti jalur contoh dan pilih `codex`, `claude`, atau `opencode`.
 
-| Lingkungan | Folder instalasi pribadi | Pemanggilan eksplisit |
-|---|---|---|
-| Codex | `~/.agents/skills/project-advisor/` | `$project-advisor` |
-| Claude Code | `~/.claude/skills/project-advisor/` | `/project-advisor` |
-| OpenCode | `~/.config/opencode/skills/project-advisor/` | Pilih atau muat skill secara eksplisit; lihat pengaturan perintah opsional di bawah. |
+```sh
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex --apply
+```
 
-`~` berarti direktori pengguna Anda, termasuk di Windows. Lokasi ini untuk alat lokal; produk yang dihosting dapat menggunakan mekanisme berbeda. Jika skill belum muncul setelah instalasi, buka sesi penasihat baru.
+Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `project-advisor`
 
-### Kontrol pemanggilan
-
-Inti skill selalu memerlukan permintaan aktivasi eksplisit. Kontrol lingkungan diatur terpisah:
-
-- **Codex:** berkas `agents/openai.yaml` yang disertakan menetapkan `policy.allow_implicit_invocation: false`.
-- **Claude Code:** tambahkan `disable-model-invocation: true` ke frontmatter YAML `SKILL.md` yang terpasang untuk mencegah pemanggilan oleh model. Ini penyesuaian Claude Code, bukan bagian dari berkas bersama.
-- **OpenCode:** tambahkan metadata bernilai teks berikut ke frontmatter `SKILL.md` terpasang untuk menyediakan perintah dan mengeluarkan skill dari panduan pemilihan otomatis:
-
-  ```yaml
-  metadata:
-    opencode/slash: "true"
-    opencode/autoinvoke: "false"
-  ```
-
-  Kemudian panggil `/project-advisor` pada versi yang mendukung pengaturan ini. Jika klien Anda berbeda, gunakan mekanisme pemuatan skill eksplisitnya.
-
-Ini penyesuaian instalasi lokal; tidak perlu membuat salinan metodologi terpisah dalam repositori. Pertahankan pengaturan frontmatter khusus lingkungan sebelum memperbarui instalasi.
-
-Panduan instalasi dan pemanggilan diperiksa terhadap dokumentasi resmi [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills), dan [OpenCode](https://opencode.ai/docs/skills/) pada 21 Oktober 2026. **Versi ini belum diuji menyeluruh dari awal hingga akhir pada ketiga klien.** Pemeriksaan dokumentasi bukan sertifikasi kompatibilitas saat dijalankan. Penggunaan penasihat versi Portugis sebelumnya menjadi dasar versi ini; adaptasi Inggris masih memerlukan masukan dari penggunaan nyata yang lebih beragam.
+[Codex / Claude Code / OpenCode — setup, updates, migration](../../skills/project-advisor/references/HARNESSES.md)
 
 ## Aktivasi dan penggunaan
 
-Panggil skill melalui mekanisme lingkungan Anda, lalu jelaskan tujuan dan folder status. Contoh:
-
-```text
-Aktifkan Project Advisor.
-Gunakan folder status eksternal ini: /jalur/ke/ruang-penasihat-saya.
-Agen pelaksana berada di percakapan terpisah.
-Saya ingin menambahkan impor pelanggan melalui CSV ke aplikasi yang sudah ada.
-```
-
-Penasihat membaca instruksi inti dan status eksternal, atau membuat status jika diperlukan. Penasihat tetap aktif dalam percakapan yang sama sampai Anda menonaktifkannya secara eksplisit:
-
-```text
-Nonaktifkan penasihat.
-```
-
-Dalam percakapan baru, aktifkan skill lagi dan berikan folder status yang sama untuk melanjutkan proyek. Instalasi saja tidak pernah mengaktifkan peran. Instruksi dan contoh dalam skill berbahasa Inggris; **penasihat berkomunikasi dalam bahasa pilihan Anda**.
+Buka chat baru di folder yang disiapkan. Pemuatan instruksi lokal mengaktifkan penasihat untuk proyek terkait; pemasangan skill saja tidak mengaktifkan chat lain. Periksa peran, proyek, status, dan langkah berikutnya. Penonaktifan eksplisit berlaku untuk chat saat ini; chat baru kembali menjadi penasihat. Jawaban mengikuti bahasa pilihan Anda.
 
 ## Peran penasihat
 
@@ -96,23 +58,21 @@ Dalam percakapan baru, aktifkan skill lagi dan berikan folder status yang sama u
 
 ## Status, privasi, dan batasan
 
-Penasihat menggunakan `ADVISOR_STATE.md` di ruang eksternal Anda. Saat membuat status baru, `ADVISOR_STATE_TEMPLATE.md` yang sudah ada didahulukan daripada skema cadangan. `STATE_SCHEMA.md` hanya memuat isian generik.
-
-Status dapat berisi keputusan sensitif, jalur, atau fakta proyek. Tentukan penyimpanan dan pembagiannya dengan sengaja. `.gitignore` mengecualikan nama berkas status, tetapi hanya dalam salinan repositori ini dan tidak menghapus berkas yang sudah dilacak. Sebaiknya simpan status pribadi di luar repositori yang dipublikasikan.
-
-Status diringkas dan diperbarui selama giliran aktif ketika informasi berubah secara berarti, saat menutup pekerjaan, atau saat melanjutkan setelah pemadatan konteks bila perlu. Tidak ada proses latar belakang, hook sesi, atau jaminan pemulihan jika konteks aktivasi hilang. Aktifkan kembali dengan folder yang sama jika perlu. Tanpa akses berkas, penasihat dapat memberikan ringkasan untuk Anda simpan, alih-alih mengklaim status sudah disimpan.
-
-Skill menyediakan instruksi, bukan kontrol akses atau jaminan keputusan benar. Perilakunya bergantung pada model, bukti, instruksi lingkungan, dan alat. Skill tidak menerapkan proyek yang dikoordinasikan atau menghubungi agen secara mandiri.
+`AGENTS.md` memuat metode; `CLAUDE.md` mengimpornya bila diperlukan. `.advisor-workspace.json` mencatat proyek, lingkungan, versi, dan hash. Status pribadi disimpan di `ADVISOR_STATE.md`; `CONSULTOR_STATE.md` lama dapat dipertahankan. Baca status sebelum memakai `--adopt-existing-state`. Simpan preferensi di `ADVISOR_LOCAL.md`. Pembaruan menampilkan perbedaan dan menolak instruksi yang telah diubah; tinjau dan gabungkan secara eksplisit. Status lama tidak ditimpa. Tidak ada hook atau layanan latar belakang. Pengujian pemasang tidak membuktikan perilaku semua klien.
 
 ## Struktur repositori
 
+Template adalah satu-satunya sumber metode yang didistribusikan; setiap workspace mendapat salinan berversi. Tidak ada CORE terpisah. Memperbarui skill tidak otomatis memperbarui workspace. Jangan publikasikan status atau pengaturan pribadi.
+
 ```text
 skills/project-advisor/
-├── SKILL.md                   Aktivasi, status, dan kelanjutan
-├── agents/openai.yaml         Kebijakan pemanggilan khusus Codex
+├── SKILL.md
+├── templates/AGENTS.md
+├── scripts/workspace.py
+├── agents/openai.yaml
 └── references/
-    ├── ADVISOR_CORE.md        Metode lintas platform
-    └── STATE_SCHEMA.md        Struktur pemulihan status
+    ├── HARNESSES.md
+    └── STATE_SCHEMA.md
 ```
 
 ## Kontribusi

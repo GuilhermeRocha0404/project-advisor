@@ -26,62 +26,24 @@
 
 ## 推荐设置
 
-让**顾问使用独立对话和位于目标项目目录树之外的独立工作区**。执行代理留在项目工作区内，遵循适用指令。附属于同一项目的第二个对话仍可能加载该项目的 `AGENTS.md`、`CLAUDE.md` 或其他本地规则。
-
-这样可以减少项目专用指令自动进入顾问上下文的情况。全局规则、父目录指令、集成及继承的上下文仍可能生效，因此不能保证完全隔离。通过目标、选定文档和执行代理报告提供必要背景。顾问可以将项目规则作为分析材料，但仍须尊重宿主环境的指令层级。
-
-每个项目的顾问状态应放在各自的外部文件夹中，位于已安装 skill 之外，最好也位于目标仓库之外。不要随 skill 发布私人项目状态。
+每个项目使用独立的顾问文件夹和聊天，放在目标仓库目录树之外。其他项目应使用新文件夹和全新状态。执行代理仍在目标仓库中工作。全局和父目录指令仍可能生效。
 
 ## 安装
 
-克隆或下载本仓库，再将整个 `skills/project-advisor` 文件夹复制到适当位置。保留与 `SKILL.md` 同级的 `references/` 和 `agents/`。覆盖已有安装前，请先检查本地修改。
+将完整的 `skills/project-advisor` 及其子目录复制到相应环境的个人技能目录。使用 Python 3.10+ 预览工作区配置，检查差异后添加 `--apply` 再次运行。替换示例路径，并选择 `codex`、`claude` 或 `opencode`。
 
-| 环境 | 个人安装目录 | 显式调用 |
-|---|---|---|
-| Codex | `~/.agents/skills/project-advisor/` | `$project-advisor` |
-| Claude Code | `~/.claude/skills/project-advisor/` | `/project-advisor` |
-| OpenCode | `~/.config/opencode/skills/project-advisor/` | 显式选择或加载 skill；可选命令设置见下文。 |
+```sh
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex --apply
+```
 
-`~` 表示用户主目录，Windows 也一样。上述路径适用于本地工具，托管产品可能采用不同机制。安装后若未显示该 skill，请开启新的顾问会话。
+Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `project-advisor`
 
-### 调用控制
-
-核心指令始终要求用户明确激活。环境级控制另行配置：
-
-- **Codex：** 随附的 `agents/openai.yaml` 设置了 `policy.allow_implicit_invocation: false`。
-- **Claude Code：** 在已安装 `SKILL.md` 的 YAML frontmatter 中添加 `disable-model-invocation: true`，阻止模型自行调用。这是 Claude Code 的适配项，不属于共享源文件。
-- **OpenCode：** 在已安装 `SKILL.md` 的 frontmatter 中添加以下字符串元数据，以提供命令并从自动选择提示中移除该 skill：
-
-  ```yaml
-  metadata:
-    opencode/slash: "true"
-    opencode/autoinvoke: "false"
-  ```
-
-  随后可在支持这些设置的版本中调用 `/project-advisor`。如客户端机制不同，请使用其显式 skill 加载方式。
-
-这些属于本地安装调整，无需在本仓库内维护多份方法论。更新安装前，请保留环境专用的 frontmatter 配置。
-
-安装和调用说明已于 2026 年 10 月 21 日对照 [Codex](https://learn.chatgpt.com/docs/build-skills)、[Claude Code](https://code.claude.com/docs/en/skills) 和 [OpenCode](https://opencode.ai/docs/skills/) 官方文档检查。**此版本尚未在三个客户端中全部进行端到端测试。** 文档检查不等于运行兼容性认证。此前葡萄牙语顾问的使用经验为本版本提供了依据；英文改编版仍需要更广泛的实际使用反馈。
+[Codex / Claude Code / OpenCode — setup, updates, migration](../../skills/project-advisor/references/HARNESSES.md)
 
 ## 激活与使用
 
-通过所在环境的方式调用 skill，然后提供目标和状态文件夹。例如：
-
-```text
-激活 Project Advisor。
-使用这个外部状态文件夹：/path/to/my-advisor-workspace。
-执行代理位于另一个对话中。
-我想为现有应用添加通过 CSV 导入客户的功能。
-```
-
-顾问会读取核心指令和外部状态，必要时创建状态。它将在同一对话中持续生效，直到你明确停用：
-
-```text
-停用顾问。
-```
-
-在新对话中，须重新明确激活 skill，并提供相同状态文件夹以继续项目。仅安装不会激活角色。skill 的指令和示例使用英语；**顾问会用你偏好的语言交流**。
+在准备好的文件夹中开启新聊天。加载本地指令后，代理成为绑定项目的顾问；仅安装技能不会激活其他聊天。请核对角色、项目、状态和下一步。明确停用仅对当前聊天生效；该文件夹中的新聊天默认恢复顾问角色。回复使用用户偏好的语言。
 
 ## 顾问的职责
 
@@ -96,23 +58,21 @@
 
 ## 状态、隐私与限制
 
-顾问在外部工作区使用 `ADVISOR_STATE.md`。创建新状态时，已有的 `ADVISOR_STATE_TEMPLATE.md` 优先于随附的备用结构。`STATE_SCHEMA.md` 仅含通用占位字段。
-
-状态可能包含敏感决策、路径或项目事实。请审慎决定存放位置和共享对象。本仓库的 `.gitignore` 会排除状态文件名，但仅对当前仓库副本生效，也不会移除已跟踪的文件。建议将私人状态保存在待公开仓库之外。
-
-状态会在活跃轮次发生实质变化、完成工作或压缩上下文后恢复时按需整理。这里没有后台进程、会话 hook，也不保证在激活上下文丢失后自动恢复。必要时用同一文件夹重新激活。若无法访问文件，顾问可以提供供你保存的交接摘要，而不能声称已持久化状态。
-
-skill 提供指令，而不是访问控制或正确决策保证。行为取决于模型、可用证据、宿主指令及工具。它不会实现被协调的项目，也不会自行联系执行代理。
+`AGENTS.md` 保存方法；需要时由 `CLAUDE.md` 导入。`.advisor-workspace.json` 记录项目、环境、版本及文件哈希。私有状态保存在 `ADVISOR_STATE.md`，旧的 `CONSULTOR_STATE.md` 可以保留。使用 `--adopt-existing-state` 前先阅读状态。个人偏好放在 `ADVISOR_LOCAL.md`。更新会展示差异并拒绝覆盖已修改的指令；请明确审查和合并。安装器不会重写现有状态。不安装钩子或后台服务。安装器测试不等于所有客户端的运行验证。
 
 ## 仓库结构
 
+模板是方法唯一的发布来源，每个工作区获得带版本的副本。不再保留独立 CORE。更新技能不会自动更新工作区。请勿公开私有状态、绑定信息或个人配置。
+
 ```text
 skills/project-advisor/
-├── SKILL.md                   激活、状态与连续性
-├── agents/openai.yaml         Codex 专用调用策略
+├── SKILL.md
+├── templates/AGENTS.md
+├── scripts/workspace.py
+├── agents/openai.yaml
 └── references/
-    ├── ADVISOR_CORE.md        独立于平台的方法
-    └── STATE_SCHEMA.md        状态恢复结构
+    ├── HARNESSES.md
+    └── STATE_SCHEMA.md
 ```
 
 ## 贡献

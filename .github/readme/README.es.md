@@ -26,62 +26,24 @@ Es un ejemplo, no una secuencia obligatoria. Las tareas claras pueden pasar dire
 
 ## Configuración recomendada
 
-Usa al **asesor en un chat y un espacio de trabajo separados, fuera del árbol de directorios del proyecto**. Mantén al agente en el espacio del proyecto, siguiendo sus instrucciones aplicables. Otro chat asociado al mismo proyecto aún puede cargar `AGENTS.md`, `CLAUDE.md` u otras reglas locales.
-
-Así se reduce la carga automática de instrucciones específicas del proyecto en el contexto del asesor. Todavía pueden aplicarse reglas globales, instrucciones de directorios superiores, integraciones y contexto heredado; no se garantiza aislamiento completo. Aporta el contexto necesario mediante objetivos, documentos seleccionados e informes del agente. El asesor puede examinar las reglas como evidencia, respetando la jerarquía de instrucciones del entorno.
-
-Guarda el estado de asesoría de cada proyecto en una carpeta externa propia, fuera de la skill instalada y preferiblemente fuera del repositorio del proyecto. No publiques estado privado con la skill.
+Utiliza una carpeta y un chat de asesoría por proyecto, fuera del repositorio de destino. Otro proyecto necesita otra carpeta y un estado nuevo. El agente ejecutor permanece en el repositorio. Las instrucciones globales y de carpetas superiores pueden seguir aplicándose.
 
 ## Instalación
 
-Clona o descarga este repositorio y copia la carpeta completa `skills/project-advisor` al destino adecuado. Conserva `references/` y `agents/` junto a `SKILL.md`. Revisa tus cambios locales antes de sobrescribir una instalación existente.
+Copia toda la carpeta `skills/project-advisor` al directorio personal de skills de tu entorno, conservando sus subcarpetas. Usa Python 3.10+ para previsualizar la preparación y repite con `--apply` tras revisar las diferencias. Sustituye las rutas de ejemplo y elige `codex`, `claude` u `opencode`.
 
-| Entorno | Carpeta de instalación personal | Invocación explícita |
-|---|---|---|
-| Codex | `~/.agents/skills/project-advisor/` | `$project-advisor` |
-| Claude Code | `~/.claude/skills/project-advisor/` | `/project-advisor` |
-| OpenCode | `~/.config/opencode/skills/project-advisor/` | Selecciona o carga la skill explícitamente; consulta la opción de comando más abajo. |
+```sh
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex --apply
+```
 
-`~` representa tu directorio personal, también en Windows. Estas rutas corresponden a herramientas locales; los productos alojados pueden usar otros mecanismos. Si la skill no aparece tras instalarla, abre una nueva sesión de asesoría.
+Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `project-advisor`
 
-### Controles de invocación
-
-El núcleo siempre exige una solicitud explícita de activación. Los controles del entorno son independientes:
-
-- **Codex:** el archivo incluido `agents/openai.yaml` establece `policy.allow_implicit_invocation: false`.
-- **Claude Code:** añade `disable-model-invocation: true` al frontmatter YAML del `SKILL.md` instalado para impedir invocaciones iniciadas por el modelo. Es una adaptación de Claude Code, no del archivo compartido.
-- **OpenCode:** añade estos metadatos con valores de texto al frontmatter del `SKILL.md` instalado para habilitar un comando y retirar la skill de las orientaciones de selección automática:
-
-  ```yaml
-  metadata:
-    opencode/slash: "true"
-    opencode/autoinvoke: "false"
-  ```
-
-  Después invoca `/project-advisor` en versiones que admitan estas opciones. Si tu cliente funciona de otra forma, usa su mecanismo explícito de carga de skills.
-
-Son ajustes de instalación locales; no requieren copias separadas de la metodología en este repositorio. Antes de actualizar, conserva la configuración de frontmatter específica del entorno.
-
-Las instrucciones de instalación e invocación se contrastaron con la documentación oficial de [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills) y [OpenCode](https://opencode.ai/docs/skills/) el 21 de octubre de 2026. **Esta versión no se ha probado de extremo a extremo en los tres clientes.** Revisar documentación no certifica compatibilidad en ejecución. La experiencia previa con el asesor en portugués orientó esta versión; la adaptación inglesa aún necesita comentarios de más usos reales.
+[Codex / Claude Code / OpenCode — setup, updates, migration](../../skills/project-advisor/references/HARNESSES.md)
 
 ## Activación y uso
 
-Invoca la skill mediante el mecanismo de tu entorno e indica el objetivo y una carpeta de estado. Por ejemplo:
-
-```text
-Activa Project Advisor.
-Usa esta carpeta externa de estado: /ruta/a/mi-espacio-de-asesoria.
-El agente de implementación está en otro chat.
-Quiero añadir importación de clientes mediante CSV a una aplicación existente.
-```
-
-El asesor lee sus instrucciones centrales y el estado externo, o crea el estado cuando es necesario. Permanece activo en el mismo chat hasta que lo desactives explícitamente:
-
-```text
-Desactiva el asesor.
-```
-
-En un chat nuevo, activa de nuevo la skill e indica la misma carpeta para retomar el proyecto. La instalación por sí sola nunca activa el rol. Las instrucciones y ejemplos de la skill están en inglés; **el asesor se comunica en el idioma que prefieras**.
+Abre un chat nuevo en la carpeta preparada. Sus instrucciones locales activan al asesor del proyecto vinculado; instalar la skill no activa otros chats. Comprueba que reconoce su función, proyecto, estado y siguiente paso. La desactivación explícita dura este chat; uno nuevo vuelve a empezar como asesor. Responde en tu idioma preferido.
 
 ## Qué hace el asesor
 
@@ -96,23 +58,21 @@ En un chat nuevo, activa de nuevo la skill e indica la misma carpeta para retoma
 
 ## Estado, privacidad y límites
 
-El asesor usa `ADVISOR_STATE.md` en tu espacio externo. Al crear un estado nuevo, un `ADVISOR_STATE_TEMPLATE.md` existente tiene prioridad sobre el esquema de recuperación incluido. `STATE_SCHEMA.md` contiene solo campos genéricos.
-
-El estado puede contener decisiones sensibles, rutas o datos del proyecto. Elige deliberadamente dónde guardarlo y con quién compartirlo. El `.gitignore` excluye los nombres de archivos de estado, pero solo protege esta copia del repositorio y no elimina archivos ya rastreados. Es preferible guardar el estado privado fuera de repositorios públicos.
-
-El estado se consolida durante turnos activos cuando cambia información relevante, al cerrar trabajo o al retomar después de una compactación, según sea necesario. No hay proceso en segundo plano, hook de sesión ni recuperación garantizada si se pierde el contexto de activación. Reactiva la skill con la misma carpeta cuando sea necesario. Sin acceso a archivos, el asesor puede entregar un resumen para que lo guardes, sin afirmar que persistió el estado.
-
-La skill proporciona instrucciones, no controles de acceso ni garantía de decisiones correctas. Su comportamiento depende del modelo, la evidencia disponible, las instrucciones del entorno y las herramientas. No implementa el proyecto coordinado ni contacta al agente por su cuenta.
+`AGENTS.md` contiene el método; `CLAUDE.md` lo importa cuando corresponde. `.advisor-workspace.json` registra proyecto, entorno, versión y hashes. El estado privado está en `ADVISOR_STATE.md`; puede conservarse `CONSULTOR_STATE.md`. Lee el estado antes de usar `--adopt-existing-state`. Guarda preferencias en `ADVISOR_LOCAL.md`. Las actualizaciones muestran diferencias y rechazan instrucciones modificadas; revisa y combina los cambios. El instalador conserva el estado existente. No hay hooks ni mantenimiento en segundo plano. Los tests del instalador no certifican el comportamiento de todos los clientes.
 
 ## Estructura del repositorio
 
+La plantilla es la única fuente distribuida del método; cada carpeta recibe una copia versionada. No existe un CORE separado. Actualizar la skill no actualiza las carpetas automáticamente. No publiques estados ni configuraciones privadas.
+
 ```text
 skills/project-advisor/
-├── SKILL.md                   Activación, estado y continuidad
-├── agents/openai.yaml         Política de invocación de Codex
+├── SKILL.md
+├── templates/AGENTS.md
+├── scripts/workspace.py
+├── agents/openai.yaml
 └── references/
-    ├── ADVISOR_CORE.md        Método independiente de plataforma
-    └── STATE_SCHEMA.md        Estructura de recuperación del estado
+    ├── HARNESSES.md
+    └── STATE_SCHEMA.md
 ```
 
 ## Contribuciones

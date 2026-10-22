@@ -26,62 +26,24 @@ This is an example, not a mandatory sequence. Clear tasks can proceed directly; 
 
 ## Recommended setup
 
-Use a **separate advisor chat and workspace outside the target project's directory tree**. Keep the worker in the project workspace, following its applicable instructions. A second chat attached to the same project may still load that project's `AGENTS.md`, `CLAUDE.md`, or other local rules.
-
-This reduces automatic loading of project-specific instructions into the advisor's context. Global instructions, parent-directory rules, integrations, and inherited session context may still apply; complete isolation is not guaranteed. Give the advisor the necessary context through goals, selected documents, and worker reports. The advisor can examine project rules as evidence while respecting the host's instruction hierarchy.
-
-Keep each project's advisor state in its own external folder, outside the installed skill and preferably outside the target repository. Do not publish private project state with the skill.
+Use one dedicated advisor folder and chat per target project, outside its directory tree. Another project gets another folder and a clean state. The worker stays in the target repository. Global and ancestor instructions can still apply; this is not complete isolation.
 
 ## Install
 
-Clone or download this repository, then copy the entire `skills/project-advisor` folder to the appropriate location. Preserve `references/` and `agents/` alongside `SKILL.md`. Do not overwrite an existing installation without reviewing your local changes.
+Copy the complete `skills/project-advisor` folder to your harness’s personal skill directory. Keep `templates/`, `scripts/`, `references/`, and `agents/`. Codex: `~/.agents/skills/project-advisor`; Claude Code: `~/.claude/skills/project-advisor`; OpenCode: `~/.config/opencode/skills/project-advisor`. Use Python 3.10+ to preview workspace setup, then repeat with `--apply` after reviewing the diff. Replace the example paths and choose `codex`, `claude`, or `opencode`.
 
-| Environment | Personal installation folder | Explicit invocation |
-|---|---|---|
-| Codex | `~/.agents/skills/project-advisor/` | `$project-advisor` |
-| Claude Code | `~/.claude/skills/project-advisor/` | `/project-advisor` |
-| OpenCode | `~/.config/opencode/skills/project-advisor/` | Select/load the skill explicitly; see the optional command setting below. |
+```sh
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex --apply
+```
 
-Here, `~` means your home directory, including on Windows. Installation directories refer to the local tools; hosted products can have different mechanisms. Use a new advisor session after installation if the skill has not appeared.
+Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `project-advisor`
 
-### Invocation controls
-
-The core always requires an explicit activation request. Host controls are separate:
-
-- **Codex:** the included `agents/openai.yaml` sets `policy.allow_implicit_invocation: false`.
-- **Claude Code:** add `disable-model-invocation: true` to the YAML frontmatter of the installed `SKILL.md` to prevent model-initiated invocation. This field is a Claude Code adaptation, not part of the shared source.
-- **OpenCode:** add the following string-valued metadata to the installed `SKILL.md` frontmatter to expose a command and remove automatic selection guidance:
-
-  ```yaml
-  metadata:
-    opencode/slash: "true"
-    opencode/autoinvoke: "false"
-  ```
-
-  Then invoke `/project-advisor` in versions supporting these settings. If your client differs, use its explicit skill-loading mechanism.
-
-These are local installation adjustments; they do not require separate copies of the methodology in this repository. Before updating an installation, preserve any host-specific frontmatter settings.
-
-Installation and invocation guidance was checked against the official [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills), and [OpenCode](https://opencode.ai/docs/skills/) documentation on October 21, 2026. **This release has not been exercised end to end in all three clients.** Documentation checks are not runtime compatibility certification. Existing use of the earlier Portuguese advisor informed this version; the English adaptation still needs broader field feedback.
+[Codex / Claude Code / OpenCode — setup, updates, migration](skills/project-advisor/references/HARNESSES.md)
 
 ## Activate and use
 
-Invoke the skill using your environment's mechanism, then provide your objective and a state folder. For example:
-
-```text
-Activate Project Advisor.
-Use this external state folder: /path/to/my-advisor-workspace.
-The implementation worker is in a separate chat.
-I want to add CSV customer imports to an existing application.
-```
-
-The advisor reads its core instructions and the external state, or creates state when needed. It remains active in the same chat until you explicitly deactivate it:
-
-```text
-Deactivate advisor.
-```
-
-For a new chat, explicitly activate the skill again and provide the same state folder to resume the project. Installation alone never activates the role. Instructions and examples are in English; **the advisor communicates in your preferred language**.
+Open a fresh chat in the prepared advisor folder. Loading its local instructions starts the advisor for its bound project; installing the skill alone does not activate other chats. Ask the agent to identify its role, project, state and next step to verify loading. Explicit deactivation applies to the current chat; a new chat in the dedicated folder starts as advisor again. Responses follow your preferred language. To resume explicitly, load the workspace AGENTS.md, binding and state.
 
 ## What the advisor does
 
@@ -96,23 +58,21 @@ For a new chat, explicitly activate the skill again and provide the same state f
 
 ## State, privacy, and limits
 
-The advisor uses `ADVISOR_STATE.md` in your external workspace. An existing `ADVISOR_STATE_TEMPLATE.md` takes precedence over the bundled fallback schema when creating a new state file. The bundled `STATE_SCHEMA.md` contains only generic placeholders.
-
-State may contain sensitive decisions, paths, or project facts. Store and share it deliberately. The repository's `.gitignore` excludes advisor state filenames, but that protection applies only within this checkout and does not remove already tracked files. Prefer keeping private state outside repositories you publish.
-
-State is consolidated during active turns when information changes materially, when closing work, or when resuming after compaction as needed. There is no background process, session hook, or guaranteed recovery if the activation context is lost. Reactivate with the same state folder when necessary. If file access is unavailable, the advisor can provide a handoff for you to save instead of claiming persistence.
-
-The skill supplies instructions, not access controls or a guarantee of correct decisions. Its behavior depends on the model, available evidence, host instructions, and tools. It does not implement the target project or independently contact the worker.
+The installed `AGENTS.md` contains the method; `CLAUDE.md` imports it only when needed. `.advisor-workspace.json` records the project, harness, method version and managed-file hashes. `ADVISOR_STATE.md` holds private decisions and progress; legacy `CONSULTOR_STATE.md` can be retained. Inspect existing state before using `--adopt-existing-state`. Keep custom preferences in `ADVISOR_LOCAL.md`. Updates use the same preview/apply command and refuse changed managed files; review and merge personal changes explicitly. Existing state is never replaced by the installer. State maintenance remains model-driven, without hooks or a background service. Documentation and installer tests do not certify runtime behavior in every harness.
 
 ## Repository layout
 
+The template is the single release source; each workspace receives a versioned copy. There is no separate CORE. Updating the skill does not silently update workspaces. Keep private state, bindings and local preferences outside the public repository.
+
 ```text
 skills/project-advisor/
-├── SKILL.md                   Activation, state, and continuity
-├── agents/openai.yaml         Codex-specific invocation policy
+├── SKILL.md
+├── templates/AGENTS.md
+├── scripts/workspace.py
+├── agents/openai.yaml
 └── references/
-    ├── ADVISOR_CORE.md        Platform-independent method
-    └── STATE_SCHEMA.md        Fallback state structure
+    ├── HARNESSES.md
+    └── STATE_SCHEMA.md
 ```
 
 ## Contributing

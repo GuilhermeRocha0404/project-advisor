@@ -3,6 +3,9 @@
 **/ADVISOR_STATE_TEMPLATE.md
 **/CONSULTOR_STATE.md
 **/CONSULTOR_STATE_TEMPLATE.md
+**/.advisor-workspace.json
+**/.advisor-setup.lock
+**/ADVISOR_LOCAL.md
 .env
 .env.*
 __pycache__/

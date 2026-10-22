@@ -26,62 +26,24 @@ Bạn muốn thêm chức năng nhập khách hàng bằng CSV vào ứng dụng
 
 ## Thiết lập khuyến nghị
 
-Dùng **cố vấn trong cuộc trò chuyện riêng, với không gian làm việc riêng nằm ngoài cây thư mục dự án đích**. Tác nhân triển khai ở trong không gian dự án và tuân thủ chỉ dẫn áp dụng. Một cuộc trò chuyện khác gắn với cùng dự án vẫn có thể nạp `AGENTS.md`, `CLAUDE.md` hoặc quy tắc cục bộ khác.
-
-Cách này giảm việc tự nạp chỉ dẫn riêng của dự án vào ngữ cảnh cố vấn. Quy tắc toàn cục, chỉ dẫn thư mục cha, tích hợp và ngữ cảnh kế thừa vẫn có thể áp dụng; không đảm bảo cách ly hoàn toàn. Cung cấp mục tiêu, tài liệu được chọn và báo cáo của tác nhân. Cố vấn có thể xem quy tắc dự án như bằng chứng, đồng thời tôn trọng thứ bậc chỉ dẫn của môi trường.
-
-Giữ trạng thái cố vấn của mỗi dự án trong thư mục ngoài riêng, ngoài skill đã cài và tốt nhất là ngoài kho dự án. Không công khai trạng thái riêng tư cùng skill.
+Dùng một thư mục và cuộc trò chuyện tư vấn riêng cho mỗi dự án, nằm ngoài kho mã đích. Dự án khác cần thư mục khác và trạng thái mới. Tác nhân thực thi làm việc trong kho mã. Chỉ dẫn toàn cục và từ thư mục cha vẫn có thể áp dụng.
 
 ## Cài đặt
 
-Sao chép hoặc tải kho này, rồi chép toàn bộ thư mục `skills/project-advisor` đến vị trí phù hợp. Giữ `references/` và `agents/` bên cạnh `SKILL.md`. Xem lại thay đổi cục bộ trước khi ghi đè bản cài hiện có.
+Sao chép toàn bộ `skills/project-advisor` cùng các thư mục con vào thư mục skill cá nhân của môi trường. Dùng Python 3.10+ để xem trước, sau đó thêm `--apply` khi đã kiểm tra thay đổi. Thay đường dẫn ví dụ và chọn `codex`, `claude` hoặc `opencode`.
 
-| Môi trường | Thư mục cài cá nhân | Gọi tường minh |
-|---|---|---|
-| Codex | `~/.agents/skills/project-advisor/` | `$project-advisor` |
-| Claude Code | `~/.claude/skills/project-advisor/` | `/project-advisor` |
-| OpenCode | `~/.config/opencode/skills/project-advisor/` | Chọn hoặc nạp skill tường minh; xem cấu hình lệnh tùy chọn bên dưới. |
+```sh
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex
+python <skill-dir>/scripts/workspace.py --workspace <advisor-dir> --project <target-dir> --harness codex --apply
+```
 
-`~` là thư mục cá nhân, kể cả trên Windows. Các đường dẫn này dành cho công cụ chạy cục bộ; sản phẩm được lưu trữ có thể dùng cơ chế khác. Nếu skill chưa xuất hiện sau khi cài, mở phiên cố vấn mới.
+Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `project-advisor`
 
-### Điều khiển cách gọi
-
-Phần lõi luôn yêu cầu kích hoạt tường minh. Điều khiển của môi trường được cấu hình riêng:
-
-- **Codex:** tệp kèm theo `agents/openai.yaml` đặt `policy.allow_implicit_invocation: false`.
-- **Claude Code:** thêm `disable-model-invocation: true` vào frontmatter YAML của `SKILL.md` đã cài để ngăn mô hình tự gọi. Đây là điều chỉnh riêng cho Claude Code, không thuộc tệp nguồn chung.
-- **OpenCode:** thêm metadata dạng chuỗi sau vào frontmatter của `SKILL.md` đã cài để cung cấp lệnh và loại skill khỏi hướng dẫn chọn tự động:
-
-  ```yaml
-  metadata:
-    opencode/slash: "true"
-    opencode/autoinvoke: "false"
-  ```
-
-  Sau đó gọi `/project-advisor` trên phiên bản hỗ trợ các thiết lập này. Nếu ứng dụng của bạn khác, dùng cơ chế nạp skill tường minh của nó.
-
-Đây là điều chỉnh cài đặt cục bộ; không cần duy trì các bản phương pháp riêng trong kho. Giữ cấu hình frontmatter riêng của môi trường trước khi cập nhật.
-
-Hướng dẫn cài đặt và gọi đã được đối chiếu với tài liệu chính thức của [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills) và [OpenCode](https://opencode.ai/docs/skills/) ngày 21 tháng 10 năm 2026. **Phiên bản này chưa được thử nghiệm toàn trình trên cả ba ứng dụng.** Kiểm tra tài liệu không chứng nhận tương thích khi chạy. Kinh nghiệm dùng cố vấn tiếng Bồ Đào Nha trước đây đã định hướng phiên bản này; bản tiếng Anh vẫn cần phản hồi thực tế rộng hơn.
+[Codex / Claude Code / OpenCode — setup, updates, migration](../../skills/project-advisor/references/HARNESSES.md)
 
 ## Kích hoạt và sử dụng
 
-Gọi skill bằng cơ chế của môi trường, rồi cung cấp mục tiêu và thư mục trạng thái. Ví dụ:
-
-```text
-Kích hoạt Project Advisor.
-Dùng thư mục trạng thái ngoài này: /path/to/my-advisor-workspace.
-Tác nhân triển khai đang ở cuộc trò chuyện riêng.
-Tôi muốn thêm nhập khách hàng bằng CSV vào ứng dụng hiện có.
-```
-
-Cố vấn đọc chỉ dẫn lõi và trạng thái ngoài, hoặc tạo trạng thái khi cần. Vai trò tiếp tục trong cùng cuộc trò chuyện cho đến khi bạn tắt tường minh:
-
-```text
-Tắt cố vấn.
-```
-
-Trong cuộc trò chuyện mới, kích hoạt lại skill và cung cấp cùng thư mục trạng thái để tiếp tục. Chỉ cài đặt không bao giờ kích hoạt vai trò. Chỉ dẫn và ví dụ của skill bằng tiếng Anh; **cố vấn trao đổi bằng ngôn ngữ bạn ưu tiên**.
+Mở cuộc trò chuyện mới trong thư mục đã chuẩn bị. Việc nạp chỉ dẫn cục bộ kích hoạt tư vấn cho dự án đã gắn; chỉ cài skill không kích hoạt các cuộc trò chuyện khác. Kiểm tra vai trò, dự án, trạng thái và bước tiếp theo. Tắt rõ ràng chỉ có hiệu lực trong cuộc trò chuyện hiện tại; cuộc trò chuyện mới lại bắt đầu ở vai trò tư vấn. Câu trả lời dùng ngôn ngữ bạn chọn.
 
 ## Cố vấn làm gì
 
@@ -96,23 +58,21 @@ Trong cuộc trò chuyện mới, kích hoạt lại skill và cung cấp cùng 
 
 ## Trạng thái, riêng tư và giới hạn
 
-Cố vấn dùng `ADVISOR_STATE.md` trong không gian ngoài của bạn. Khi tạo trạng thái mới, `ADVISOR_STATE_TEMPLATE.md` hiện có được ưu tiên hơn lược đồ dự phòng đi kèm. `STATE_SCHEMA.md` chỉ chứa các trường mẫu chung.
-
-Trạng thái có thể chứa quyết định nhạy cảm, đường dẫn hoặc thông tin dự án. Chọn nơi lưu và người nhận một cách có chủ đích. `.gitignore` loại tên tệp trạng thái nhưng chỉ trong bản sao kho này và không xóa tệp đã được theo dõi. Nên giữ trạng thái riêng ngoài các kho sẽ công khai.
-
-Trạng thái được hợp nhất trong lượt hoạt động khi thông tin thay đổi đáng kể, lúc kết thúc việc hoặc tiếp tục sau nén ngữ cảnh khi cần. Không có tiến trình nền, hook phiên hay đảm bảo khôi phục nếu mất ngữ cảnh kích hoạt. Kích hoạt lại với cùng thư mục khi cần. Nếu không truy cập được tệp, cố vấn có thể đưa bản tóm tắt để bạn lưu thay vì khẳng định đã lưu trạng thái.
-
-Skill cung cấp chỉ dẫn, không phải kiểm soát truy cập hay đảm bảo quyết định đúng. Hành vi phụ thuộc mô hình, bằng chứng sẵn có, chỉ dẫn môi trường và công cụ. Skill không triển khai dự án được điều phối hay tự liên hệ tác nhân.
+`AGENTS.md` chứa phương pháp; `CLAUDE.md` nhập tệp đó khi cần. `.advisor-workspace.json` ghi dự án, môi trường, phiên bản và mã băm. Trạng thái riêng nằm trong `ADVISOR_STATE.md`; có thể giữ `CONSULTOR_STATE.md` cũ. Đọc trạng thái trước khi dùng `--adopt-existing-state`. Lưu tùy chọn trong `ADVISOR_LOCAL.md`. Cập nhật hiển thị khác biệt và từ chối ghi đè chỉ dẫn đã sửa; cần xem xét và hợp nhất. Trạng thái có sẵn được giữ nguyên. Không có hook hay dịch vụ nền. Kiểm thử trình cài không chứng minh hành vi của mọi ứng dụng.
 
 ## Cấu trúc kho
 
+Mẫu là nguồn phương pháp duy nhất được phân phối; mỗi workspace nhận bản sao có phiên bản. Không còn CORE riêng. Cập nhật skill không tự cập nhật workspace. Không công bố trạng thái hay cấu hình riêng.
+
 ```text
 skills/project-advisor/
-├── SKILL.md                   Kích hoạt, trạng thái, tiếp nối
-├── agents/openai.yaml         Chính sách gọi riêng cho Codex
+├── SKILL.md
+├── templates/AGENTS.md
+├── scripts/workspace.py
+├── agents/openai.yaml
 └── references/
-    ├── ADVISOR_CORE.md        Phương pháp độc lập nền tảng
-    └── STATE_SCHEMA.md        Cấu trúc khôi phục trạng thái
+    ├── HARNESSES.md
+    └── STATE_SCHEMA.md
 ```
 
 ## Đóng góp
