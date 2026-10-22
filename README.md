@@ -1,6 +1,6 @@
 # Project Advisor
 
-**English** · [Português (Brasil)](.github/readme/README.pt-BR.md)
+**English** · [简体中文](.github/readme/README.zh-CN.md) · [Español](.github/readme/README.es.md) · [Português (Brasil)](.github/readme/README.pt-BR.md) · [日本語](.github/readme/README.ja.md) · [Tiếng Việt](.github/readme/README.vi.md) · [한국어](.github/readme/README.ko.md) · [فارسی](.github/readme/README.fa.md) · [ภาษาไทย](.github/readme/README.th.md) · [العربية](.github/readme/README.ar.md) · [Français](.github/readme/README.fr.md) · [Bahasa Indonesia](.github/readme/README.id.md)
 
 A platform-independent skill for critical project guidance, focused worker prompts, and evidence-based review.
 

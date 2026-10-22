@@ -1,6 +1,6 @@
 # Project Advisor
 
-[English](../../README.md) · **Português (Brasil)**
+[English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · **Português (Brasil)** · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
 
 Uma skill independente de plataforma para orientar projetos com senso crítico, preparar prompts objetivos para um agente trabalhador e avaliar resultados com base em evidências.
 
