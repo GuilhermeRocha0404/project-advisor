@@ -8,8 +8,28 @@ from pathlib import Path
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '2.0.0'
+VERSION = '2.1.0'
 MANIFEST = '.advisor-workspace.json'
+STATE_NAMES = ('ADVISOR_STATE.md', 'CONSULTOR_STATE.md')
+
+
+def read_manifest(path):
+    try:
+        data = json.loads(path.read_text(encoding='utf-8'))
+        if (not isinstance(data, dict) or data.get('schema') != 1
+                or not isinstance(data.get('project'), str)
+                or not Path(data['project']).is_absolute()
+                or data.get('state_file') not in STATE_NAMES
+                or data.get('harness') not in ('codex', 'claude', 'opencode')
+                or not isinstance(data.get('files'), dict)
+                or not all(isinstance(k, str) and isinstance(v, str)
+                           for k, v in data['files'].items())):
+            raise ValueError('Invalid manifest structure.')
+        return data
+    except (ValueError, UnicodeError) as error:
+        raise ValueError('Invalid workspace manifest. Preserve state and instructions; '
+                         'recover the binding from a trusted backup or review it explicitly. '
+                         'Do not delete the manifest to force setup.') from error
 
 
 def digest(data):
@@ -36,19 +56,22 @@ def prepare(args):
         raise ValueError('Project must be a directory.')
     if workspace == project or workspace in project.parents or project in workspace.parents:
         raise ValueError('Advisor and target project must have separate directory trees.')
-    if workspace == ROOT or ROOT in workspace.parents:
-        raise ValueError('State must be outside the installed skill.')
-    if args.state_file not in ('ADVISOR_STATE.md', 'CONSULTOR_STATE.md'):
-        raise ValueError('Unsupported state filename.')
+    if workspace == ROOT or ROOT in workspace.parents or workspace in ROOT.parents:
+        raise ValueError('Advisor and installed skill must have separate directory trees.')
     manifest_path = workspace / MANIFEST
     if manifest_path.is_symlink():
         raise ValueError('Manifest cannot be a symlink.')
-    previous = json.loads(manifest_path.read_text(encoding='utf-8')) if manifest_path.exists() else None
+    previous = read_manifest(manifest_path) if manifest_path.exists() else None
+    args.state_file = args.state_file or (previous['state_file'] if previous else 'ADVISOR_STATE.md')
+    if args.state_file not in STATE_NAMES:
+        raise ValueError('Unsupported state filename.')
     if previous:
         if previous.get('schema') != 1:
             raise ValueError('Unsupported manifest schema.')
         if Path(previous['project']).resolve() != project:
-            raise ValueError('Workspace belongs to another project. Use a new folder.')
+            raise ValueError('Project binding differs. Use another workspace for another project. '
+                             'For a moved checkout, verify its identity and explicitly review '
+                             'the manifest project path; setup never rebinds automatically.')
         if previous['state_file'] != args.state_file:
             raise ValueError('Preserve the existing state filename.')
         if previous['harness'] != args.harness:
@@ -69,8 +92,11 @@ def prepare(args):
     for override in ('AGENTS.override.md', 'CLAUDE.local.md'):
         if (workspace / override).exists():
             raise ValueError(f'Review existing {override} before setup.')
+    # Universal newline reading intentionally produces UTF-8/LF on every platform.
     template = (ROOT / 'templates/AGENTS.md').read_text(encoding='utf-8')
     method = template.replace('{{STATE_FILE}}', args.state_file).encode('utf-8')
+    initial = (ROOT / 'references/STATE_SCHEMA.md').read_text(encoding='utf-8')
+    initial = initial.replace('{{PROJECT_NAME}}', project.name)
     wanted = {'AGENTS.md': method}
     if args.harness == 'claude':
         wanted['CLAUDE.md'] = b'# Project Advisor workspace\n\n@AGENTS.md\n'
@@ -105,8 +131,13 @@ def prepare(args):
         return
     workspace.mkdir(parents=True, exist_ok=True)
     lock = workspace / '.advisor-setup.lock'
-    with lock.open('x', encoding='utf-8') as stream:
-        stream.write(str(os.getpid()))
+    try:
+        with lock.open('x', encoding='utf-8') as stream:
+            stream.write(str(os.getpid()))
+    except FileExistsError as error:
+        raise ValueError('Setup lock exists. Check its PID and whether another setup is active. '
+                         'If it is confirmed stale, inspect interrupted writes and remove only '
+                         '.advisor-setup.lock before retrying. No automatic removal was performed.') from error
     try:
         for name, old in snapshots.items():
             path = workspace / name
@@ -121,10 +152,6 @@ def prepare(args):
             if snapshots[name] != data:
                 atomic_write(workspace / name, data)
         if state_before is None:
-            initial = ('# Advisor state\n\n## Project\n\n' + str(project) +
-                       '\n\n## Current objective\n\nNot defined.\n\n## Active decisions\n\nNone recorded.\n\n'
-                       '## Latest worker task and result\n\nNot defined.\n\n## Open issues\n\nNot defined.\n\n'
-                       '## Next step\n\nAsk for the project objective.\n')
             with state.open('x', encoding='utf-8', newline='\n') as stream:
                 stream.write(initial)
         atomic_write(manifest_path, (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
@@ -138,7 +165,8 @@ def main():
     parser.add_argument('--workspace', required=True)
     parser.add_argument('--project', required=True)
     parser.add_argument('--harness', choices=('codex', 'claude', 'opencode'), required=True)
-    parser.add_argument('--state-file', default='ADVISOR_STATE.md')
+    parser.add_argument('--state-file', choices=STATE_NAMES,
+                        help='Defaults to the existing manifest name, or ADVISOR_STATE.md on first setup.')
     parser.add_argument('--adopt-existing-state', action='store_true')
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()

@@ -6,6 +6,7 @@ import json
 import hashlib
 import sys
 import tempfile
+import os
 import unittest
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'skills/project-advisor/scripts/workspace.py'
@@ -13,7 +14,7 @@ SCRIPT = Path(__file__).resolve().parents[1] / 'skills/project-advisor/scripts/w
 
 class WorkspaceTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
+        self.temp = tempfile.TemporaryDirectory(dir=os.environ.get('ADVISOR_TEST_TMPDIR'))
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.project = self.root / 'target'
@@ -46,6 +47,70 @@ class WorkspaceTests(unittest.TestCase):
         self.assertEqual(state.read_bytes(), before)
         self.assertEqual(local.read_bytes(), b'Use Portuguese.\n')
         self.assertFalse((self.workspace / 'ADVISOR_STATE.md').exists())
+        self.assertEqual(self.run_setup('--apply').returncode, 0)
+        self.assertEqual(state.read_bytes(), before)
+
+    def test_manifest_errors_preserve_files(self):
+        self.assertEqual(self.run_setup('--apply').returncode, 0)
+        manifest = self.workspace / '.advisor-workspace.json'
+        for invalid in ('{', '[]', '{}', '{"schema": 1, "project": 3}'):
+            manifest.write_text(invalid, encoding='utf-8')
+            before = {p.name: p.read_bytes() for p in self.workspace.iterdir()}
+            result = self.run_setup('--apply')
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('recover the binding', result.stderr)
+            self.assertEqual(before, {p.name: p.read_bytes() for p in self.workspace.iterdir()})
+
+    def test_lock_recovery_does_not_remove_existing_lock(self):
+        self.assertEqual(self.run_setup('--apply').returncode, 0)
+        lock = self.workspace / '.advisor-setup.lock'
+        lock.write_text('unknown process', encoding='utf-8')
+        before = {p.name: p.read_bytes() for p in self.workspace.iterdir()}
+        result = self.run_setup('--apply')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('confirmed stale', result.stderr)
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.workspace.iterdir()})
+
+    def test_skill_ancestor_is_rejected_without_writes(self):
+        source = self.root / 'advisor-parent' / 'skill'
+        shutil.copytree(SCRIPT.parents[1], source)
+        parent = source.parent
+        result = subprocess.run([sys.executable, str(source / 'scripts/workspace.py'),
+                                 '--workspace', str(parent), '--project', str(self.project),
+                                 '--harness', 'codex', '--apply'], capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(list(parent.iterdir()), [source])
+
+    def test_single_schema_and_lf_output(self):
+        source = self.root / 'crlf-skill'
+        shutil.copytree(SCRIPT.parents[1], source)
+        for relative in ('templates/AGENTS.md', 'references/STATE_SCHEMA.md'):
+            path = source / relative
+            path.write_bytes(path.read_text(encoding='utf-8').replace('\n', '\r\n').encode('utf-8'))
+        result = subprocess.run([sys.executable, str(source / 'scripts/workspace.py'),
+                                 '--workspace', str(self.workspace), '--project', str(self.project),
+                                 '--harness', 'codex', '--apply'], capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        state = (self.workspace / 'ADVISOR_STATE.md').read_bytes()
+        expected = (source / 'references/STATE_SCHEMA.md').read_text(encoding='utf-8')
+        self.assertEqual(state, expected.replace('{{PROJECT_NAME}}', self.project.name).encode('utf-8'))
+        self.assertNotIn(b'\r', (self.workspace / 'AGENTS.md').read_bytes())
+        self.assertNotIn(str(self.project).encode(), state)
+
+    def test_missing_manifest_does_not_overwrite_workspace(self):
+        self.assertEqual(self.run_setup('--apply').returncode, 0)
+        (self.workspace / '.advisor-workspace.json').unlink()
+        before = {p.name: p.read_bytes() for p in self.workspace.iterdir()}
+        self.assertNotEqual(self.run_setup('--adopt-existing-state', '--apply').returncode, 0)
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.workspace.iterdir()})
+
+    def test_legacy_template_is_preserved(self):
+        self.workspace.mkdir()
+        template = self.workspace / 'CONSULTOR_STATE_TEMPLATE.md'
+        template.write_bytes(b'legacy template')
+        self.assertNotEqual(self.run_setup('--apply').returncode, 0)
+        self.assertEqual(list(self.workspace.iterdir()), [template])
+        self.assertEqual(template.read_bytes(), b'legacy template')
 
     def test_refuses_project_switch_and_modified_instructions(self):
         self.assertEqual(self.run_setup('--apply').returncode, 0)

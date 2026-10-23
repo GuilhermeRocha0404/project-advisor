@@ -84,3 +84,9 @@ README 번역은 `.github/readme/`에 있습니다. 문서 업데이트 시 예�
 ## 라이선스
 
 [MIT](../../LICENSE) — Copyright (c) 2026 Guilherme Rocha.
+
+## 2.1.0
+
+2.1.0 개정: 상태는 증거의 출처를 구분하고 대체된 결정을 정리하며 유효한 제약과 미완료 검증을 보존합니다. 설치 프로그램은 단일 상태 스키마를 사용하고 기존 파일명을 보존하며 매니페스트와 잠금 복구 안내를 개선합니다. 품질, 시간 또는 비용 개선을 입증하는 통제 비교는 없습니다. 어댑터 테스트는 각 환경의 실제 실행을 입증하지 않습니다. 파일 접근이 없는 채팅에서는 방법과 상태를 직접 제공하고 저장해야 합니다.
+
+[English technical reference](../../docs/AUDIT_2_1.md) · [Examples](../../skills/project-advisor/references/EXAMPLES.md)

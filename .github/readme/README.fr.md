@@ -84,3 +84,9 @@ Les traductions du README se trouvent dans `.github/readme/`. Gardez exemples, c
 ## Licence
 
 [MIT](../../LICENSE) — Copyright (c) 2026 Guilherme Rocha.
+
+## 2.1.0
+
+Révision 2.1.0 : l’état distingue la provenance des preuves et réconcilie les décisions remplacées, en préservant les contraintes et vérifications ouvertes. L’installateur utilise un schéma unique, conserve le nom historique et améliore la récupération du manifeste et du verrou. Aucune comparaison contrôlée ne démontre un gain de qualité, de temps ou de coût. Les adaptateurs ne prouvent pas le fonctionnement réel dans chaque environnement ; sans accès aux fichiers, la méthode et l’état doivent être fournis et sauvegardés manuellement.
+
+[English technical reference](../../docs/AUDIT_2_1.md) · [Examples](../../skills/project-advisor/references/EXAMPLES.md)

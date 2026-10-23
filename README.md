@@ -56,6 +56,12 @@ Open a fresh chat in the prepared advisor folder. Loading its local instructions
 - Respects informed decisions and authorization boundaries.
 - Maintains a concise, current handoff rather than an accumulating activity log.
 
+## Evidence and supported environments
+
+This is a proposed working method, not a demonstrated productivity improvement. There is no controlled comparison of quality, time or cost against a single-agent workflow. Installer tests verify filesystem behavior; behavioral observations are limited scenarios.
+
+Filesystem adapters are supplied for Codex, Claude Code and OpenCode. Runtime validation status is recorded in [HARNESSES.md](skills/project-advisor/references/HARNESSES.md); adapter generation is not proof of runtime loading. For chats without filesystem access, provide the method and current handoff manually and save updates yourself. Automatic binding checks and persistence are unavailable there.
+
 ## State, privacy, and limits
 
 The installed `AGENTS.md` contains the method; `CLAUDE.md` imports it only when needed. `.advisor-workspace.json` records the project, harness, method version and managed-file hashes. `ADVISOR_STATE.md` holds private decisions and progress; legacy `CONSULTOR_STATE.md` can be retained. Inspect existing state before using `--adopt-existing-state`. Keep custom preferences in `ADVISOR_LOCAL.md`. Updates use the same preview/apply command and refuse changed managed files; review and merge personal changes explicitly. Existing state is never replaced by the installer. State maintenance remains model-driven, without hooks or a background service. Documentation and installer tests do not certify runtime behavior in every harness.
@@ -72,6 +78,7 @@ skills/project-advisor/
 ├── agents/openai.yaml
 └── references/
     ├── HARNESSES.md
+    ├── EXAMPLES.md
     └── STATE_SCHEMA.md
 ```
 
@@ -84,3 +91,9 @@ README translations live in `.github/readme/`. Keep their examples, commands, li
 ## License
 
 [MIT](LICENSE) — Copyright (c) 2026 Guilherme Rocha.
+
+## Audit revision 2.1.0
+
+State reconciliation now protects open verification and active constraints, records evidence provenance, and removes superseded directions at closure or replacement. The installer shares one state schema, preserves legacy state names on update, validates manifests, explains stale-lock recovery and rejects overlapping skill/workspace trees. Existing state is never reset.
+
+See [audit decisions and verification](docs/AUDIT_2_1.md) and [examples](skills/project-advisor/references/EXAMPLES.md). Translations preserve the chosen language set; English is the maintained technical reference. Translation wording has not received independent native-speaker review.

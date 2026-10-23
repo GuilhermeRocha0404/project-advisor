@@ -20,8 +20,24 @@ Legacy migration: retain the existing state filename and bytes, inspect its bind
 
 Verification should include dry-run/no-write behavior, independent workspaces, refusal to switch projects, preservation of existing state and custom instructions, and the Claude import adapter. A fresh-session role/state check is separate from these deterministic checks. Neither file validation nor documentation review proves end-to-end behavior across all clients or perfect state maintenance after compaction. No hooks are included.
 
-## Verification of this revision
+## Historical verification of 2.0.0
 
 Nine synthetic installer tests passed with Python 3.12 on Windows (`python -m unittest discover -s tests -v`). They cover setup, updates, state preservation, missing-state refusal, independent projects, adapters and instruction conflicts. The package passed the skill metadata validator; relative Markdown links were checked.
 
 A fresh, ephemeral Codex CLI session in read-only mode correctly identified its advisor role, synthetic project binding, state file and recorded next action. Its tool trace showed reads of the local manifest and state, without implementing the next action. This is one observed session, not a compaction reliability benchmark. Claude Code and OpenCode runtime loading have not been exercised for this revision.
+
+## Updates and recovery (2.1.0)
+
+Updates infer the state filename from an existing valid manifest. Explicit conflicting names are refused. Both ADVISOR_STATE_TEMPLATE.md and CONSULTOR_STATE_TEMPLATE.md are recognized for recovery; STATE_SCHEMA.md is the single initial-state source used by the installer. Existing state bytes are preserved. Generated instruction files use UTF-8/LF regardless of template CRLF.
+
+A malformed or missing manifest is not permission to initialize over existing instructions. Preserve files and recover a trusted binding; ask for clarification if project identity is uncertain. Absolute project paths are local binding data. Moving only the advisor folder does not change the project path. When the project itself moves, verify it is the same project and explicitly review the manifest path change; do not bypass managed-file hashes or rebind to a different project.
+
+For a setup lock, check whether its PID belongs to an active setup. A PID alone is insufficient because it may be reused. Only after confirming the lock is stale, inspect partial writes and remove that lock. Never delete it automatically or delete state to make setup pass. Multi-file installation is not a single transaction.
+
+The local name consultor-codex is an optional legacy alias, not the public package name. Preserve its name/frontmatter and invocation metadata when updating an existing alias; the distributed package remains project-advisor.
+
+Run installer checks with Python unittest. If the platform's default temporary directory is restricted, set ADVISOR_TEST_TMPDIR to an existing writable scratch directory; this does not require disabling the sandbox. Running on one OS does not establish cross-platform execution.
+
+Before release, verify current harness documentation and actual loading separately. Codex's documented default project_doc_max_bytes is 32 KiB; inspect the effective instruction chain, including global rules, rather than measuring only this template. A fresh-session response should cover the final sections as well as role/binding, and its reads should be inspected. This is a scenario check, not a guarantee after arbitrary compactions.
+
+Claude Code/OpenCode adapter-file tests are not runtime tests in those products. In clients without filesystem access, supply the method and current handoff manually and save the returned state yourself; no automatic persistence is provided.

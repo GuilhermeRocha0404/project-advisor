@@ -84,3 +84,9 @@ Bản dịch README nằm trong `.github/readme/`. Khi cập nhật, giữ ví d
 ## Giấy phép
 
 [MIT](../../LICENSE) — Copyright (c) 2026 Guilherme Rocha.
+
+## 2.1.0
+
+Bản sửa đổi 2.1.0: trạng thái phân biệt nguồn bằng chứng, đối chiếu các quyết định đã thay thế và giữ lại ràng buộc cùng kiểm chứng chưa hoàn tất. Trình cài đặt dùng một mẫu trạng thái, giữ tên tệp cũ và cải thiện hướng dẫn khôi phục manifest và khóa. Chưa có so sánh có kiểm soát chứng minh lợi ích về chất lượng, thời gian hoặc chi phí. Kiểm thử bộ chuyển đổi không chứng minh hoạt động thực tế trong từng môi trường; khi chat không truy cập tệp, cần cung cấp và lưu phương pháp cùng trạng thái thủ công.
+
+[English technical reference](../../docs/AUDIT_2_1.md) · [Examples](../../skills/project-advisor/references/EXAMPLES.md)

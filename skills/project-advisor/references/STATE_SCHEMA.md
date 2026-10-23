@@ -1,35 +1,29 @@
-# ADVISOR_STATE
+# Advisor state
 
 ## Project
 
-<Project name and reference, or not defined.>
+{{PROJECT_NAME}}. Authoritative local binding: .advisor-workspace.json.
 
-## Current environment
+## Active objective and authorization
 
-- Main worker: <model and reasoning effort, or not defined.>
-- Relevant repository instructions: <confirmed information, or not defined.>
-- Other active skills, integrations, or constraints: <confirmed information, or not defined.>
+Not defined.
 
-## Current objective
+## Active decisions and constraints
 
-<Active objective, none, or not defined.>
+None recorded.
 
-## Active decisions
+## Latest worker task and evidence
 
-- <Decisions that still affect the work, none, or not defined.>
+No task recorded. Distinguish reported, inspected and personally executed evidence.
 
-## Latest task given to the worker
+## Open issues and verification limits
 
-<Brief summary, none, or not defined.>
+Not defined. Preserve unresolved checks even after implementation closes.
 
-## Relevant result received
+## Completed references needed for continuity
 
-<Brief summary and its limits, none, or not defined.>
-
-## Open issues
-
-- <Open issues, none, or not defined.>
+None recorded.
 
 ## Next step
 
-<Next action, not defined, or none — task complete.>
+Ask for the project objective.
