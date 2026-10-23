@@ -24,7 +24,7 @@ Status: local revision 2.1.1 after external review of 2.1.0; publication pending
 | C1 | Corrected in 2.1.1 | Compression omitted the explicit warning against weakened checks. Restored it and the stalled-investigation guidance; task sizing remains in prose. |
 | C2 | Applied | Optional examples and bounded evaluation cases in references/EXAMPLES.md. |
 | C3 | Applied | Prompt language follows user preference unless worker needs differ. |
-| C4 | Adapted | All eleven translations retained, with localized revision/limitations notes; English technical reference linked. No independent native-speaker review. |
+| C4 | Superseded by user decision | The audit revision initially retained eleven translations. On 2026-10-23, the user chose to maintain only English and Brazilian Portuguese to reduce documentation drift. Language links and maintenance guidance were updated; independent native-speaker review remains unperformed. |
 | C5 | Preserved | Workspace activation and per-chat deactivation explained in method and entrypoint. |
 | C6 | Reviewed | External package contains generic method, tests and synthetic evidence; no private state/logs included. No anonymity guarantee claimed. |
 | I1 | Pending external review | Corrected revision prepared for a third party; self-review not presented as external acceptance. |

@@ -1,6 +1,6 @@
 # Project Advisor
 
-[English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · **Português (Brasil)** · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
+[English](../../README.md) · **Português (Brasil)**
 
 Um método de consultoria de projetos independente de modelo, com adaptadores de workspace para Codex, Claude Code e OpenCode.
 
@@ -79,7 +79,7 @@ skills/project-advisor/
 
 Descreva um problema real, o comportamento esperado e por que a mudança proposta ajuda sem acrescentar processo desnecessário. Use exemplos sintéticos, remova informações privadas e informe o ambiente e os limites das verificações de comportamento realizadas. Melhorias devem preservar a distinção entre orientações reutilizáveis e preferências particulares de uma pessoa ou projeto.
 
-As traduções do README ficam em `.github/readme/`. Ao atualizar a documentação, mantenha exemplos, comandos, links e limitações alinhados com o README em inglês. Adicione links de navegação somente para traduções incluídas no repositório.
+Mantenha a documentação README somente em inglês e português do Brasil. A versão em português fica em `.github/readme/README.pt-BR.md`. Atualize as duas versões juntas para preservar o alinhamento de exemplos, comandos, links e limitações.
 
 ## Licença
 

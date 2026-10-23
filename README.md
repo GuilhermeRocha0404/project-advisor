@@ -1,6 +1,6 @@
 # Project Advisor
 
-**English** · [简体中文](.github/readme/README.zh-CN.md) · [Español](.github/readme/README.es.md) · [Português (Brasil)](.github/readme/README.pt-BR.md) · [日本語](.github/readme/README.ja.md) · [Tiếng Việt](.github/readme/README.vi.md) · [한국어](.github/readme/README.ko.md) · [فارسی](.github/readme/README.fa.md) · [ภาษาไทย](.github/readme/README.th.md) · [العربية](.github/readme/README.ar.md) · [Français](.github/readme/README.fr.md) · [Bahasa Indonesia](.github/readme/README.id.md)
+**English** · [Português (Brasil)](.github/readme/README.pt-BR.md)
 
 A model-independent project advisory method with workspace adapters for Codex, Claude Code and OpenCode.
 
@@ -86,7 +86,7 @@ skills/project-advisor/
 
 Describe a real problem, the expected behavior, and why the proposed change helps without adding unnecessary process. Use synthetic examples, remove private information, and report the environment and limitations of any behavioral checks. Improvements should preserve the distinction between reusable guidance and personal or project-specific preferences.
 
-README translations live in `.github/readme/`. Keep their examples, commands, links, and limitations aligned with the English README when updating documentation. Add language navigation links only for translations included in the repository.
+Maintain README documentation in English and Brazilian Portuguese only. The Portuguese version lives in `.github/readme/README.pt-BR.md`. Update both versions together so examples, commands, links and limitations remain aligned.
 
 ## License
 
@@ -96,4 +96,4 @@ README translations live in `.github/readme/`. Keep their examples, commands, li
 
 State reconciliation now protects open verification and active constraints, records evidence provenance, and removes superseded directions at closure or replacement. The installer shares one state schema, preserves legacy state names on update, validates manifests, explains stale-lock recovery and rejects overlapping skill/workspace trees. Existing state is never reset.
 
-See [audit decisions and verification](docs/AUDIT_2_1.md) and [examples](skills/project-advisor/references/EXAMPLES.md). Translations preserve the chosen language set; English is the maintained technical reference. Translation wording has not received independent native-speaker review.
+See [audit decisions and verification](docs/AUDIT_2_1.md) and [examples](skills/project-advisor/references/EXAMPLES.md). English and Brazilian Portuguese are the maintained README languages; English is the technical reference. Translation wording has not received independent native-speaker review.
