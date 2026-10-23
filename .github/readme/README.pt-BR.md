@@ -85,7 +85,7 @@ As traduções do README ficam em `.github/readme/`. Ao atualizar a documentaç�
 
 [MIT](../../LICENSE) — Copyright (c) 2026 Guilherme Rocha.
 
-## 2.1.0
+## 2.1
 
 Revisão 2.1.0: o estado passa a registrar a origem das evidências e a reconciliar decisões substituídas, preservando restrições e verificações abertas. O instalador usa um esquema único, preserva o nome legado e melhora a recuperação de manifesto e trava. Não há comparação controlada que demonstre ganhos de qualidade, tempo ou custo. Adaptadores não comprovam execução real em cada ambiente; em chats sem arquivos, o método e o estado precisam ser fornecidos e salvos manualmente.
 

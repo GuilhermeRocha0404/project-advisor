@@ -85,7 +85,7 @@ Terjemahan README berada di `.github/readme/`. Saat memperbarui dokumentasi, sel
 
 [MIT](../../LICENSE) — Copyright (c) 2026 Guilherme Rocha.
 
-## 2.1.0
+## 2.1
 
 Revisi 2.1.0: status membedakan asal bukti dan menyelaraskan keputusan yang diganti, sambil mempertahankan batasan aktif dan verifikasi terbuka. Pemasang memakai satu skema status, mempertahankan nama lama, serta memperjelas pemulihan manifes dan kunci. Belum ada perbandingan terkontrol yang membuktikan manfaat kualitas, waktu, atau biaya. Pengujian adaptor tidak membuktikan eksekusi nyata di setiap lingkungan; dalam chat tanpa akses berkas, metode dan status harus diberikan dan disimpan secara manual.
 

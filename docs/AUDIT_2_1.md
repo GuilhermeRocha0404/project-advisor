@@ -1,4 +1,4 @@
-# Audit revision 2.1.0
+# Audit revision 2.1
 
 Status: local revision 2.1.1 after external review of 2.1.0; publication pending. No controlled evidence establishes productivity, quality or cost gains. This record distinguishes implemented changes from unperformed runtime checks.
 
@@ -42,7 +42,7 @@ Status: local revision 2.1.1 after external review of 2.1.0; publication pending
 ## Verification
 
 - Fifteen installer tests passed on Windows/Python 3.12. New cases cover malformed/missing manifest, existing lock, legacy update/template, ancestor overlap and CRLF/schema consistency.
-- First sandbox run failed at temporary-directory access before exercising installer behavior, even with a workspace scratch location. The authorized execution outside that ACL restriction passed. This is not Linux execution evidence.
+- First sandbox run failed at temporary-directory access before exercising installer behavior, even with a workspace scratch location. The authorized execution outside that ACL restriction passed. This local run establishes Windows evidence only. Separately, the external reviewer reported all 15 tests passing on Linux/Python 3.12.3 for revision 2.1.0; the maintainer did not execute that Linux run or inspect its raw logs.
 - Isolated behavioral evaluator read only the method and four synthetic scenarios, without the example answer/reference. It requested authorization evidence for a build-only report, treated unavailable integration as unverified, challenged removal of tenant isolation with an alternative, and preserved database verification while recognizing authorized resumption. These are bounded observations, not reliability statistics.
 - Workspace update preserved existing state bytes; subsequent state maintenance is a separate operation.
 - Claude Code/OpenCode adapter generation is tested; runtime loading in those products remains unverified. Long-term behavior over several real handoffs and final external review remain pending.
