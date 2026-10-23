@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · **Bahasa Indonesia**
 
-Skill lintas platform untuk memberi arahan proyek secara kritis, menyusun instruksi terarah bagi agen pelaksana, dan menilai hasil berdasarkan bukti.
+Metode konsultasi proyek yang independen dari model, dengan adaptor ruang kerja untuk Codex, Claude Code, dan OpenCode.
 
 Gunakan satu percakapan untuk menentukan pekerjaan berikutnya yang bernilai dan agen lain untuk menyelidiki, menerapkan, serta memverifikasi. Penasihat menguji asumsi yang lemah, menyarankan proses yang sebanding dengan masalah, dan menilai hasilnya. Keputusan tentang tujuan, prioritas, dan preferensi tetap berada di tangan Anda.
 

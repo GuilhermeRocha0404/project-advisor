@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · **한국어** · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
 
-프로젝트를 비판적으로 검토하고, 구현 에이전트에 명확한 작업 지시를 작성하며, 근거에 따라 결과를 평가하는 플랫폼 독립적인 skill입니다.
+특정 모델에 종속되지 않는 프로젝트 자문 방법으로, Codex, Claude Code 및 OpenCode용 워크스페이스 어댑터를 제공합니다.
 
 한 채팅에서 다음에 할 가치 있는 작업을 결정하고, 다른 에이전트가 조사·구현·검증을 수행하게 하세요. 자문자는 취약한 가정을 검토하고 문제에 비례하는 절차를 제안하며 결과를 평가합니다. 목표, 우선순위, 선호에 관한 결정권은 사용자에게 있습니다.
 

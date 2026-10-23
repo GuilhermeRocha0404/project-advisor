@@ -2,7 +2,7 @@
 
 **English** · [简体中文](.github/readme/README.zh-CN.md) · [Español](.github/readme/README.es.md) · [Português (Brasil)](.github/readme/README.pt-BR.md) · [日本語](.github/readme/README.ja.md) · [Tiếng Việt](.github/readme/README.vi.md) · [한국어](.github/readme/README.ko.md) · [فارسی](.github/readme/README.fa.md) · [ภาษาไทย](.github/readme/README.th.md) · [العربية](.github/readme/README.ar.md) · [Français](.github/readme/README.fr.md) · [Bahasa Indonesia](.github/readme/README.id.md)
 
-A platform-independent skill for critical project guidance, focused worker prompts, and evidence-based review.
+A model-independent project advisory method with workspace adapters for Codex, Claude Code and OpenCode.
 
 Use one chat to decide what is worth doing next and another agent to investigate, implement, and verify. The advisor challenges weak assumptions, recommends a proportionate process, and evaluates results. You retain decisions about goals, priorities, and preferences.
 
@@ -92,7 +92,7 @@ README translations live in `.github/readme/`. Keep their examples, commands, li
 
 [MIT](LICENSE) — Copyright (c) 2026 Guilherme Rocha.
 
-## Audit revision 2.1.0
+## Audit revision 2.1
 
 State reconciliation now protects open verification and active constraints, records evidence provenance, and removes superseded directions at closure or replacement. The installer shares one state schema, preserves legacy state names on update, validates manifests, explains stale-lock recovery and rejects overlapping skill/workspace trees. Existing state is never reset.
 

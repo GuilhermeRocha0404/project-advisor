@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [日本語](README.ja.md) · **Tiếng Việt** · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
 
-Một skill không phụ thuộc nền tảng để tư vấn dự án với tư duy phản biện, soạn chỉ dẫn tập trung cho tác nhân triển khai và đánh giá kết quả dựa trên bằng chứng.
+Phương pháp tư vấn dự án không phụ thuộc mô hình, với bộ chuyển đổi không gian làm việc cho Codex, Claude Code và OpenCode.
 
 Dùng một cuộc trò chuyện để quyết định công việc tiếp theo đáng làm và một tác nhân khác để khảo sát, triển khai, kiểm chứng. Cố vấn xem xét các giả định yếu, đề xuất quy trình tương xứng với vấn đề và đánh giá kết quả. Bạn giữ quyền quyết định mục tiêu, ưu tiên và sở thích.
 

@@ -41,3 +41,9 @@ Run installer checks with Python unittest. If the platform's default temporary d
 Before release, verify current harness documentation and actual loading separately. Codex's documented default project_doc_max_bytes is 32 KiB; inspect the effective instruction chain, including global rules, rather than measuring only this template. A fresh-session response should cover the final sections as well as role/binding, and its reads should be inspected. This is a scenario check, not a guarantee after arbitrary compactions.
 
 Claude Code/OpenCode adapter-file tests are not runtime tests in those products. In clients without filesystem access, supply the method and current handoff manually and save the returned state yourself; no automatic persistence is provided.
+
+## File permissions
+
+The installer is intended for a private, single-user advisor workspace. On POSIX, mkstemp creates replacement instruction/manifest files with owner-only permissions (0600); replacement keeps that mode, including when updating a previously more permissive file. This conservative behavior is intentional. State creation follows the process umask, and existing state permissions are untouched; the installer does not enforce a uniform permission policy for all workspace files.
+
+Shared/container/WSL access across users requires an explicit local permission decision. Do not broaden access automatically. Windows access is governed by its ACLs. No cross-user runtime validation is claimed.

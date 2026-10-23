@@ -2,7 +2,7 @@
 
 [English](../../README.md) · **简体中文** · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
 
-一个独立于平台的 skill，用于审慎指导项目、为执行代理编写聚焦的任务指令，并依据证据评估结果。
+一种不依赖特定模型的项目顾问方法，提供适用于 Codex、Claude Code 和 OpenCode 的工作区适配器。
 
 用一个对话决定接下来值得做什么，用另一个代理调查、实现和验证。顾问会质疑薄弱的假设，推荐与问题相称的流程，并评估结果。目标、优先级和个人偏好的决定权始终在你手中。
 

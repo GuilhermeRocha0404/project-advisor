@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · **Português (Brasil)** · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
 
-Uma skill independente de plataforma para orientar projetos com senso crítico, preparar prompts objetivos para um agente trabalhador e avaliar resultados com base em evidências.
+Um método de consultoria de projetos independente de modelo, com adaptadores de workspace para Codex, Claude Code e OpenCode.
 
 Use um chat para decidir o próximo trabalho útil e outro agente para investigar, implementar e verificar. O consultor questiona premissas frágeis, recomenda um processo proporcional ao problema e avalia os resultados. Você mantém as decisões sobre objetivos, prioridades e preferências.
 

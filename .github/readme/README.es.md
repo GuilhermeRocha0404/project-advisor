@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · **Español** · [Português (Brasil)](README.pt-BR.md) · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
 
-Una skill independiente de la plataforma para orientar proyectos con criterio, preparar instrucciones concretas para un agente de implementación y revisar resultados a partir de evidencias.
+Un método de asesoría de proyectos independiente del modelo, con adaptadores de espacio de trabajo para Codex, Claude Code y OpenCode.
 
 Usa un chat para decidir qué trabajo aporta valor a continuación y otro agente para investigar, implementar y verificar. El asesor cuestiona supuestos débiles, recomienda un proceso proporcional al problema y evalúa los resultados. Tú conservas las decisiones sobre objetivos, prioridades y preferencias.
 

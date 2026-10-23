@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · **日本語** · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [Bahasa Indonesia](README.id.md)
 
-プロジェクトを批判的に検討し、実装エージェントに的を絞った指示を作成し、証拠に基づいて結果を評価する、プラットフォームに依存しない skill です。
+モデルに依存しないプロジェクト助言の方法です。Codex、Claude Code、OpenCode 向けのワークスペースアダプターを提供します。
 
 一つのチャットで次に取り組む価値のある作業を判断し、別のエージェントが調査・実装・検証を行います。アドバイザーは弱い前提を問い直し、問題に見合った進め方を提案して結果を評価します。目標・優先順位・好みの決定権はあなたにあります。
 

@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [日本語](README.ja.md) · [Tiếng Việt](README.vi.md) · [한국어](README.ko.md) · [فارسی](README.fa.md) · [ภาษาไทย](README.th.md) · [العربية](README.ar.md) · **Français** · [Bahasa Indonesia](README.id.md)
 
-Une skill indépendante de la plateforme pour orienter les projets avec esprit critique, préparer des consignes ciblées pour un agent de réalisation et évaluer les résultats à partir de preuves.
+Une méthode de conseil en projets indépendante du modèle, avec des adaptateurs d’espace de travail pour Codex, Claude Code et OpenCode.
 
 Utilisez une conversation pour décider du prochain travail utile et un autre agent pour examiner, réaliser et vérifier. Le conseiller remet en question les hypothèses fragiles, recommande une démarche proportionnée et évalue les résultats. Vous gardez la maîtrise des objectifs, des priorités et des préférences.
 

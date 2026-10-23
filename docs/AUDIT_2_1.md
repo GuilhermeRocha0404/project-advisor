@@ -1,6 +1,6 @@
 # Audit revision 2.1.0
 
-Status: local revision for external review; publication pending. No controlled evidence establishes productivity, quality or cost gains. This record distinguishes implemented changes from unperformed runtime checks.
+Status: local revision 2.1.1 after external review of 2.1.0; publication pending. No controlled evidence establishes productivity, quality or cost gains. This record distinguishes implemented changes from unperformed runtime checks.
 
 ## Decisions by finding
 
@@ -21,7 +21,7 @@ Status: local revision for external review; publication pending. No controlled e
 | B8 | Clarified | Public project-advisor name preserved; local consultor-codex documented as legacy alias. |
 | B9 | Applied | Filesystem adapter scope and manual no-filesystem workflow distinguished. |
 | B10 | Checked | Official documentation URLs opened during audit review; runtime support remains a separate question. |
-| C1 | Applied | Method reorganized to remove repeated checklist prose while preserving safeguards. |
+| C1 | Corrected in 2.1.1 | Compression omitted the explicit warning against weakened checks. Restored it and the stalled-investigation guidance; task sizing remains in prose. |
 | C2 | Applied | Optional examples and bounded evaluation cases in references/EXAMPLES.md. |
 | C3 | Applied | Prompt language follows user preference unless worker needs differ. |
 | C4 | Adapted | All eleven translations retained, with localized revision/limitations notes; English technical reference linked. No independent native-speaker review. |
@@ -64,3 +64,15 @@ An ephemeral Codex read-only session identified the advisor role, project bindin
 The initial CLI attempt was blocked by sandbox initialization permissions; the authorized retry retained the inner read-only mode and completed. Skill metadata validation passed for distribution and local alias. Relative Markdown links and git diff whitespace checks passed. The revised method is about 10.6 KB, below the previous 15,199-byte installed method; byte count alone does not measure instruction quality.
 
 Publication, external acceptance, repeated real-world handoff evaluation and Claude/OpenCode runtime tests remain pending.
+
+## External review and follow-up 2.1.1
+
+The external reviewer reported all 15 installer tests passing on Linux/Python 3.12.3 against the 2.1.0 package (30321c1). This is externally reported execution, not a Linux run performed or raw test logs inspected by this maintainer. It adds Linux evidence without proving macOS or Claude Code/OpenCode runtime behavior.
+
+The reviewer identified a genuinely omitted safeguard: success must not be accepted by hiding failures, weakening contracts or disabling checks. It is restored in the evaluation section, together with explicit attention to removed/relaxed checks. Guidance on investigating stalled hypotheses/context/environment is restored. Task difficulty remains covered in prose rather than duplicating a table.
+
+The README introduction and all translations now describe a model-independent method with specific workspace adapters. State reconciliation is a short ordered sequence. POSIX owner-only replacement permissions are documented deliberately; no permission-broadening code was added.
+
+Four one-shot synthetic behavioral cases are not out-of-sample validation or sustained reliability evidence. Repetition and additional cases unlike the published examples belong to the planned real-use evaluation. The external reviewer did not rerun those behavioral cases and had authored the original recommendations, so this review does not establish strong independent acceptance. A different reviewer or human review of the final version remains desirable before claiming that acceptance.
+
+Publication remains pending the user's decision.

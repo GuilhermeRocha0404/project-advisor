@@ -1,6 +1,6 @@
 # Project Advisor workspace
 
-<!-- project-advisor method 2.1.0; source: templates/AGENTS.md -->
+<!-- project-advisor method 2.1.1; source: templates/AGENTS.md -->
 
 ## Activation and binding
 
@@ -18,9 +18,12 @@ State is a handoff, not a domain archive. Keep the objective, binding reference,
 
 Update state when an objective, authorization, decision, worker task/result, blocker or next action materially changes. Before editing, reread it and preserve concurrent changes. A delivered prompt is not proof it was sent or executed. Distinguish proposed, authorized, implemented and verified, and distinguish reported evidence from evidence inspected or checks personally executed.
 
-On task closure, replacement, or resumption, reconcile all sections, not only the changed passage. Review wording such as "paused", "do not resume", "not yet" and "waiting" against the latest authorization and evidence; these are review signals, not deletion rules. Use explicit status and a useful date, commit or evidence reference instead of "this reply" or "now". Separate active decisions/open verification from concise completed references, without building a completed-work archive.
+On task closure, replacement, or resumption:
 
-Remove superseded directions and duplicate detail. Preserve unresolved verification, relevant limitations and active safeguards even when implementation is complete. Remove a constraint only when evidence resolves it or an informed decision supersedes it; this need not create a new approval gate. Keep material necessary for the next decision or safe recovery, without a fixed size target. At closure, briefly state what was condensed or removed; if meaningful consolidation was unnecessary, say so briefly. Do not narrate every routine state edit.
+1. Reconcile all sections against the latest authorization and evidence. Review wording such as "paused", "do not resume", "not yet" and "waiting" as signals, not deletion rules.
+2. Remove superseded directions and duplicate detail. Use explicit status and a useful date, commit or evidence reference instead of "this reply" or "now"; separate active decisions/open verification from concise completed references without creating an archive.
+3. Preserve unresolved verification, relevant limitations and active safeguards even after implementation closes. Remove a constraint only when evidence resolves it or an informed decision supersedes it; no additional approval is needed solely for that reconciliation.
+4. Keep what is needed for the next decision or safe recovery, without a fixed size target. At closure, briefly state what was condensed or removed, or why meaningful consolidation was unnecessary. Do not narrate every routine edit.
 
 Never write credentials, tokens, token-bearing URLs or unnecessary personal/customer identifiers into state. Use aliases and references for real cases. Commit IDs and other technical references may be useful, but paths, branches and URLs can also disclose private information; minimize them and sanitize external copies. Local binding paths can remain in the private manifest.
 
@@ -40,7 +43,7 @@ Connect each proposed task to the desired outcome. Distinguish a blocked case fr
 
 Choose process by uncertainty, impact and recovery cost, not file counts. Clear, localized changes usually need direct investigation and verification; interacting contracts may need a short plan; security, data, payment or migration changes may warrant deeper review and recovery measures.
 
-Investigate concrete causes, contracts and consumers. For failures, delimit or reproduce the scenario, address the cause, and verify affected behavior. Demonstrate failure before and success after when useful and practical; disclose reproduction limits. Reuse valid work and expand checks only when changes, failures or unresolved concerns justify them.
+Investigate concrete causes, contracts and consumers. When progress stalls, check mistaken hypotheses, missing context and environmental obstacles before restarting valid work. For failures, delimit or reproduce the scenario, address the cause, and verify affected behavior. Demonstrate failure before and success after when useful and practical; disclose reproduction limits. Reuse valid work and expand checks only when changes, failures or unresolved concerns justify them.
 
 Prefer established patterns and resources. Avoid independent refactoring or functionality beyond the goal, while preserving security, accessibility, validation, compatibility and error handling. Fewer lines, more tests or a successful build alone do not establish quality.
 
@@ -61,6 +64,8 @@ Request investigation alone when findings are needed to decide a requirement or 
 ## 4. Evaluating results
 
 Compare the result to the goal, completion criteria and risk. Say whether your conclusion rests on the worker's report, inspected artifacts, or checks you executed. A precise report can suffice for a low-risk task; inspect connected code, diffs or test evidence when needed to resolve a material correctness or risk question. Do not substitute more logs for evidence exercising the actual risk.
+
+Do not accept success obtained by hiding failures, weakening contracts or disabling relevant checks. When reviewing evidence, examine removed or relaxed checks where they could conceal the affected failure.
 
 A screenshot does not prove interaction; a build does not prove authorization. UI appearance, interaction and accessibility may require different evidence. Tests should protect meaningful behavior rather than reproduce implementation.
 
