@@ -4,7 +4,7 @@
 
 Um método de consultoria de projetos independente de modelo, com adaptadores de workspace para Codex, Claude Code e OpenCode.
 
-Use um chat para decidir o próximo trabalho útil e outro agente para investigar, implementar e verificar. O consultor questiona premissas frágeis, recomenda um processo proporcional ao problema e avalia os resultados. Você mantém as decisões sobre objetivos, prioridades e preferências.
+Conversas longas com agentes de desenvolvimento podem perder decisões e deixar conclusões sem evidência suficiente. O Project Advisor busca manter decisões, continuidade e avaliação de evidências no workspace do consultor; um trabalhador separado investiga, implementa e verifica dentro do projeto. Você mantém o controle dos objetivos e das prioridades.
 
 A metodologia não exige um modelo, fornecedor, plugin ou serviço externo específico. Ela foi pensada para projetos de desenvolvimento em ambientes de agentes que consigam carregar suas instruções e arquivos de referência.
 
@@ -56,6 +56,18 @@ Abra um novo chat na pasta preparada. O carregamento das instruções locais ini
 - Respeita decisões informadas e limites de autorização.
 - Mantém um ponto de retomada conciso e atual, em vez de acumular um registro de atividades.
 
+## Evidências e ambientes
+
+Este é um método proposto, sem comparação controlada que demonstre ganhos de qualidade, tempo ou custo frente a um único agente. Testes do instalador verificam o filesystem; observações comportamentais cobrem cenários limitados.
+
+Há adaptadores de arquivos para Codex, Claude Code e OpenCode. [HARNESSES.md](../../skills/project-advisor/references/HARNESSES.md) registra as verificações: gerar um adaptador não comprova seu carregamento real. Em chats sem acesso a arquivos, forneça o método e o estado e salve atualizações manualmente; não há validação automática do vínculo nem persistência.
+
+## Verificações do instalador e releases
+
+[GitHub Actions](https://github.com/GuilhermeRocha0404/project-advisor/actions/workflows/installer-tests.yml) executa `python -m unittest discover -s tests -v` em Windows e Linux com Python 3.10 e 3.12, em pushes e Pull Requests. Esses testes determinísticos cobrem o instalador/filesystem, não decisões do modelo ou execução real dos ambientes. O workflow não adiciona dependências Python.
+
+[Releases](https://github.com/GuilhermeRocha0404/project-advisor/releases) registram versões e mudanças para usuários; o audit preserva evidências e decisões. Não há changelog separado.
+
 ## Estado, privacidade e limites
 
 O `AGENTS.md` instalado contém o método; `CLAUDE.md` o importa quando necessário. `.advisor-workspace.json` registra projeto, ambiente, versão e hashes dos arquivos gerenciados. `ADVISOR_STATE.md` guarda decisões privadas e progresso; o nome legado `CONSULTOR_STATE.md` pode ser preservado. Leia o estado antes de usar `--adopt-existing-state`. Guarde preferências em `ADVISOR_LOCAL.md`. Atualizações usam o mesmo comando de prévia/aplicação e recusam arquivos gerenciados modificados; revise e mescle personalizações explicitamente. O instalador nunca substitui um estado existente. A manutenção do estado continua dependente do modelo, sem hooks ou serviço em segundo plano. Documentação e testes do instalador não certificam execução em todos os ambientes.
@@ -72,12 +84,13 @@ skills/project-advisor/
 ├── agents/openai.yaml
 └── references/
     ├── HARNESSES.md
+    ├── EXAMPLES.md
     └── STATE_SCHEMA.md
 ```
 
-## Contribuições
+## Manutenção e feedback
 
-Descreva um problema real, o comportamento esperado e por que a mudança proposta ajuda sem acrescentar processo desnecessário. Use exemplos sintéticos, remova informações privadas e informe o ambiente e os limites das verificações de comportamento realizadas. Melhorias devem preservar a distinção entre orientações reutilizáveis e preferências particulares de uma pessoa ou projeto.
+Este é um projeto pessoal, compartilhado para uso por outras pessoas e conduzido pelo mantenedor. O mantenedor decide direção, arquitetura e implementação. [Issues](https://github.com/GuilhermeRocha0404/project-advisor/issues) são bem-vindas para bugs, incompatibilidades e experiências reais de uso. Use exemplos sintéticos pequenos e remova informações privadas. Pull Requests não são solicitados nem necessários e podem não ser aceitos.
 
 Mantenha a documentação README somente em inglês e português do Brasil. A versão em português fica em `.github/readme/README.pt-BR.md`. Atualize as duas versões juntas para preservar o alinhamento de exemplos, comandos, links e limitações.
 
@@ -87,6 +100,8 @@ Mantenha a documentação README somente em inglês e português do Brasil. A ve
 
 ## 2.1
 
-Revisão 2.1.0: o estado passa a registrar a origem das evidências e a reconciliar decisões substituídas, preservando restrições e verificações abertas. O instalador usa um esquema único, preserva o nome legado e melhora a recuperação de manifesto e trava. Não há comparação controlada que demonstre ganhos de qualidade, tempo ou custo. Adaptadores não comprovam execução real em cada ambiente; em chats sem arquivos, o método e o estado precisam ser fornecidos e salvos manualmente.
+Revisão 2.1: o estado passa a registrar a origem das evidências e a reconciliar decisões substituídas, preservando restrições e verificações abertas. O instalador usa um esquema único, preserva o nome legado e melhora a recuperação de manifesto e trava. Não há comparação controlada que demonstre ganhos de qualidade, tempo ou custo. Adaptadores não comprovam execução real em cada ambiente; em chats sem arquivos, o método e o estado precisam ser fornecidos e salvos manualmente.
 
-[English technical reference](../../docs/AUDIT_2_1.md) · [Examples](../../skills/project-advisor/references/EXAMPLES.md)
+[Registro técnico em inglês](../../docs/AUDIT_2_1.md) · [Exemplos](../../skills/project-advisor/references/EXAMPLES.md)
+
+Inglês e português do Brasil são os idiomas mantidos para o README; inglês é a referência técnica. A tradução não recebeu revisão independente por falante nativo.

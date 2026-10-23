@@ -31,4 +31,6 @@ Use synthetic artifacts and a fresh context. Give the evaluator the method, user
 - Authorized resumption after pause: retain the current authorization; do not revive obsolete stop instructions.
 - Fresh session: identify role, binding, current work and next action without giving it those values in the question; inspect reads and final-section understanding.
 
+Future observations should include several successive handoffs, resumption after long context or compaction, preservation of open constraints, worker objections to a premise, and correct closure. Include cases beyond these examples and record repetitions and failures; these observations have not been performed as a sustained evaluation.
+
 Observe several real handoffs before claiming sustained state quality. Compare overhead and useful corrections with a simpler workflow when feasible; no controlled productivity or cost benefit has been established.

@@ -4,7 +4,7 @@
 
 A model-independent project advisory method with workspace adapters for Codex, Claude Code and OpenCode.
 
-Use one chat to decide what is worth doing next and another agent to investigate, implement, and verify. The advisor challenges weak assumptions, recommends a proportionate process, and evaluates results. You retain decisions about goals, priorities, and preferences.
+Long coding-agent conversations can lose decisions and leave completion claims unsupported. Project Advisor aims to keep decisions, continuity and evidence review in an advisor workspace; a separate worker investigates, implements and verifies inside the project. You retain control of goals and priorities.
 
 The methodology has no required model, vendor, plugin, or external service. It is intended for development projects across agent environments that can load its instructions and supporting files.
 
@@ -62,6 +62,12 @@ This is a proposed working method, not a demonstrated productivity improvement. 
 
 Filesystem adapters are supplied for Codex, Claude Code and OpenCode. Runtime validation status is recorded in [HARNESSES.md](skills/project-advisor/references/HARNESSES.md); adapter generation is not proof of runtime loading. For chats without filesystem access, provide the method and current handoff manually and save updates yourself. Automatic binding checks and persistence are unavailable there.
 
+## Installer checks and releases
+
+[GitHub Actions](https://github.com/GuilhermeRocha0404/project-advisor/actions/workflows/installer-tests.yml) runs `python -m unittest discover -s tests -v` on Windows and Linux with Python 3.10 and 3.12 for pushes and pull requests. These deterministic checks cover installer/filesystem behavior, not model decisions or harness runtime. The workflow adds no Python dependencies.
+
+[Releases](https://github.com/GuilhermeRocha0404/project-advisor/releases) provide versioned checkpoints and user-facing notes; the audit retains evidence and decisions. No separate changelog is maintained.
+
 ## State, privacy, and limits
 
 The installed `AGENTS.md` contains the method; `CLAUDE.md` imports it only when needed. `.advisor-workspace.json` records the project, harness, method version and managed-file hashes. `ADVISOR_STATE.md` holds private decisions and progress; legacy `CONSULTOR_STATE.md` can be retained. Inspect existing state before using `--adopt-existing-state`. Keep custom preferences in `ADVISOR_LOCAL.md`. Updates use the same preview/apply command and refuse changed managed files; review and merge personal changes explicitly. Existing state is never replaced by the installer. State maintenance remains model-driven, without hooks or a background service. Documentation and installer tests do not certify runtime behavior in every harness.
@@ -82,9 +88,9 @@ skills/project-advisor/
     └── STATE_SCHEMA.md
 ```
 
-## Contributing
+## Maintenance and feedback
 
-Describe a real problem, the expected behavior, and why the proposed change helps without adding unnecessary process. Use synthetic examples, remove private information, and report the environment and limitations of any behavioral checks. Improvements should preserve the distinction between reusable guidance and personal or project-specific preferences.
+This is a personal, maintainer-led project shared for others to use. The maintainer decides direction, architecture and implementation. [Issues](https://github.com/GuilhermeRocha0404/project-advisor/issues) are welcome for bugs, incompatibilities and real usage experiences. Use small synthetic examples and redact private information. Pull requests are not requested or required and may not be accepted.
 
 Maintain README documentation in English and Brazilian Portuguese only. The Portuguese version lives in `.github/readme/README.pt-BR.md`. Update both versions together so examples, commands, links and limitations remain aligned.
 

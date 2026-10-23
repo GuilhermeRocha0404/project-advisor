@@ -1,6 +1,6 @@
 # Audit revision 2.1
 
-Status: local revision 2.1.1 after external review of 2.1.0; publication pending. No controlled evidence establishes productivity, quality or cost gains. This record distinguishes implemented changes from unperformed runtime checks.
+Status: revision 2.1.1 is published on the repository main branch through 6024818, following external review of 2.1.0. This is source publication, distinct from a tagged GitHub Release. No controlled evidence establishes productivity, quality or cost gains. This record distinguishes implemented changes from unperformed runtime checks.
 
 ## Decisions by finding
 
@@ -45,7 +45,7 @@ Status: local revision 2.1.1 after external review of 2.1.0; publication pending
 - First sandbox run failed at temporary-directory access before exercising installer behavior, even with a workspace scratch location. The authorized execution outside that ACL restriction passed. This local run establishes Windows evidence only. Separately, the external reviewer reported all 15 tests passing on Linux/Python 3.12.3 for revision 2.1.0; the maintainer did not execute that Linux run or inspect its raw logs.
 - Isolated behavioral evaluator read only the method and four synthetic scenarios, without the example answer/reference. It requested authorization evidence for a build-only report, treated unavailable integration as unverified, challenged removal of tenant isolation with an alternative, and preserved database verification while recognizing authorized resumption. These are bounded observations, not reliability statistics.
 - Workspace update preserved existing state bytes; subsequent state maintenance is a separate operation.
-- Claude Code/OpenCode adapter generation is tested; runtime loading in those products remains unverified. Long-term behavior over several real handoffs and final external review remain pending.
+- Claude Code/OpenCode adapter generation is tested; runtime loading in those products remains unverified. Long-term behavior over several real handoffs and additional review independent of the original recommendations remain pending.
 
 ## Historical trace clarification
 
@@ -63,7 +63,7 @@ An ephemeral Codex read-only session identified the advisor role, project bindin
 
 The initial CLI attempt was blocked by sandbox initialization permissions; the authorized retry retained the inner read-only mode and completed. Skill metadata validation passed for distribution and local alias. Relative Markdown links and git diff whitespace checks passed. The revised method is about 10.6 KB, below the previous 15,199-byte installed method; byte count alone does not measure instruction quality.
 
-Publication, external acceptance, repeated real-world handoff evaluation and Claude/OpenCode runtime tests remain pending.
+Source publication is complete. Strong independent acceptance, repeated real-world handoff evaluation and Claude/OpenCode runtime tests remain unverified.
 
 ## External review and follow-up 2.1.1
 
@@ -75,4 +75,4 @@ The README introduction and all translations now describe a model-independent me
 
 Four one-shot synthetic behavioral cases are not out-of-sample validation or sustained reliability evidence. Repetition and additional cases unlike the published examples belong to the planned real-use evaluation. The external reviewer did not rerun those behavioral cases and had authored the original recommendations, so this review does not establish strong independent acceptance. A different reviewer or human review of the final version remains desirable before claiming that acceptance.
 
-Publication remains pending the user's decision.
+Source publication was authorized and completed; additional behavioral/runtime validation remains pending.
