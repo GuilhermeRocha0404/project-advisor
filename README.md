@@ -41,6 +41,33 @@ Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `proje
 
 [Codex / Claude Code / OpenCode — setup, updates, migration](skills/project-advisor/references/HARNESSES.md)
 
+## Quick start
+
+For an existing project at `../sample-app`, run from this repository root (or replace the script path with your installed copy):
+
+```sh
+python skills/project-advisor/scripts/workspace.py --workspace ../sample-advisor --project ../sample-app --harness codex
+python skills/project-advisor/scripts/workspace.py --workspace ../sample-advisor --project ../sample-app --harness codex --apply
+```
+
+Review the preview before the second command. Open a fresh advisor chat in `../sample-advisor` and ask: "Identify your role, bound project and next step. I want staff to import customer CSV files; repeated emails should be reported for review. Help me choose the first useful delivery."
+
+The generated `ADVISOR_STATE.md` starts with unknown facts. As decisions are made, the advisor maintains a handoff such as this synthetic excerpt; keep the other generated sections and record remaining unknowns:
+
+```md
+## Active objective and authorization
+CSV customer import; planning authorized, implementation not yet authorized.
+
+## Active decisions and constraints
+Repeated emails go to review; existing customers must not be overwritten.
+
+## Latest worker task and evidence
+No worker task sent and no execution evidence received.
+
+## Next step
+Clarify which staff roles may import, then prepare a bounded worker prompt.
+```
+
 ## Activate and use
 
 Open a fresh chat in the prepared advisor folder. Loading its local instructions starts the advisor for its bound project; installing the skill alone does not activate other chats. Ask the agent to identify its role, project, state and next step to verify loading. Explicit deactivation applies to the current chat; a new chat in the dedicated folder starts as advisor again. Responses follow your preferred language. To resume explicitly, load the workspace AGENTS.md, binding and state.
@@ -64,13 +91,15 @@ Filesystem adapters are supplied for Codex, Claude Code and OpenCode. Runtime va
 
 ## Installer checks and releases
 
-[GitHub Actions](https://github.com/GuilhermeRocha0404/project-advisor/actions/workflows/installer-tests.yml) runs `python -m unittest discover -s tests -v` on Windows and Linux with Python 3.10 and 3.12 for pushes and pull requests. These deterministic checks cover installer/filesystem behavior, not model decisions or harness runtime. The workflow adds no Python dependencies.
+[GitHub Actions](https://github.com/GuilhermeRocha0404/project-advisor/actions/workflows/installer-tests.yml) runs `python -m unittest discover -s tests -v` on Windows and Linux with Python 3.10 and 3.12, plus macOS with Python 3.12, for pushes and pull requests. The workflow adds no Python dependencies. Run `python <skill-dir>/scripts/workspace.py --version` to identify the method version; use the release or commit to identify subsequent installer changes.
 
 [Releases](https://github.com/GuilhermeRocha0404/project-advisor/releases) provide versioned checkpoints and user-facing notes; the audit retains evidence and decisions. No separate changelog is maintained.
 
 ## State, privacy, and limits
 
-The installed `AGENTS.md` contains the method; `CLAUDE.md` imports it only when needed. `.advisor-workspace.json` records the project, harness, method version and managed-file hashes. `ADVISOR_STATE.md` holds private decisions and progress; legacy `CONSULTOR_STATE.md` can be retained. Inspect existing state before using `--adopt-existing-state`. Keep custom preferences in `ADVISOR_LOCAL.md`. Updates use the same preview/apply command and refuse changed managed files; review and merge personal changes explicitly. Existing state is never replaced by the installer. State maintenance remains model-driven, without hooks or a background service. Documentation and installer tests do not certify runtime behavior in every harness.
+The installed `AGENTS.md` contains the method; `CLAUDE.md` imports it only when needed. `.advisor-workspace.json` records the project, harness, method version and managed-file hashes. `ADVISOR_STATE.md` holds private decisions and progress; legacy `CONSULTOR_STATE.md` can be retained. Keep custom preferences in `ADVISOR_LOCAL.md`. State maintenance is model-driven, without hooks or a background service.
+
+Updates use the same preview/apply command and refuse changed managed files. Existing state is never replaced; inspect it before using `--adopt-existing-state`. New POSIX state files request owner-only permissions (`0600`); existing state permissions remain unchanged. Windows uses ACLs. If setup stops before the manifest is written, follow [interrupted-install recovery](skills/project-advisor/references/HARNESSES.md#interrupted-first-install) to preserve state and review orphaned instructions before retrying.
 
 ## Repository layout
 
@@ -102,4 +131,4 @@ Maintain README documentation in English and Brazilian Portuguese only. The Port
 
 State reconciliation now protects open verification and active constraints, records evidence provenance, and removes superseded directions at closure or replacement. The installer shares one state schema, preserves legacy state names on update, validates manifests, explains stale-lock recovery and rejects overlapping skill/workspace trees. Existing state is never reset.
 
-See [audit decisions and verification](docs/AUDIT_2_1.md) and [examples](skills/project-advisor/references/EXAMPLES.md). English and Brazilian Portuguese are the maintained README languages; English is the technical reference. Translation wording has not received independent native-speaker review.
+See [audit decisions and verification](docs/AUDIT_2_1.md) and [examples](skills/project-advisor/references/EXAMPLES.md). English is the technical reference; the Portuguese wording has not received independent native-speaker review.

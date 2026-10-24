@@ -41,6 +41,33 @@ Codex: `$project-advisor` · Claude Code: `/project-advisor` · OpenCode: `proje
 
 [Codex / Claude Code / OpenCode — setup, updates, migration](../../skills/project-advisor/references/HARNESSES.md)
 
+## Início rápido
+
+Para um projeto existente em `../sample-app`, execute a partir da raiz deste repositório (ou substitua o caminho do script pela cópia instalada):
+
+```sh
+python skills/project-advisor/scripts/workspace.py --workspace ../sample-advisor --project ../sample-app --harness codex
+python skills/project-advisor/scripts/workspace.py --workspace ../sample-advisor --project ../sample-app --harness codex --apply
+```
+
+Revise a prévia antes do segundo comando. Abra um novo chat de consultoria em `../sample-advisor` e peça: “Identifique seu papel, projeto vinculado e próximo passo. Quero que a equipe importe clientes por CSV; e-mails repetidos devem ser sinalizados para revisão. Ajude-me a escolher a primeira entrega útil.”
+
+O `ADVISOR_STATE.md` gerado começa com fatos desconhecidos. Conforme as decisões são tomadas, o consultor mantém um ponto de retomada como neste trecho fictício; preserve as outras seções geradas e registre o que ainda for desconhecido:
+
+```md
+## Active objective and authorization
+Importação de clientes por CSV; planejamento autorizado, implementação ainda não autorizada.
+
+## Active decisions and constraints
+E-mails repetidos vão para revisão; clientes existentes não devem ser sobrescritos.
+
+## Latest worker task and evidence
+Nenhuma tarefa enviada ao trabalhador e nenhuma evidência de execução recebida.
+
+## Next step
+Esclarecer quais perfis da equipe podem importar, depois preparar um prompt delimitado.
+```
+
 ## Ativação e uso
 
 Abra um novo chat na pasta preparada. O carregamento das instruções locais inicia o consultor do projeto vinculado; apenas instalar a skill não ativa outros chats. Peça ao agente que identifique papel, projeto, estado e próximo passo para conferir o carregamento. A desativação explícita vale para o chat atual; um novo chat nessa pasta começa como consultor. As respostas seguem seu idioma preferido. Para retomar explicitamente, carregue o AGENTS.md local, o vínculo e o estado.
@@ -64,13 +91,15 @@ Há adaptadores de arquivos para Codex, Claude Code e OpenCode. [HARNESSES.md](.
 
 ## Verificações do instalador e releases
 
-[GitHub Actions](https://github.com/GuilhermeRocha0404/project-advisor/actions/workflows/installer-tests.yml) executa `python -m unittest discover -s tests -v` em Windows e Linux com Python 3.10 e 3.12, em pushes e Pull Requests. Esses testes determinísticos cobrem o instalador/filesystem, não decisões do modelo ou execução real dos ambientes. O workflow não adiciona dependências Python.
+[GitHub Actions](https://github.com/GuilhermeRocha0404/project-advisor/actions/workflows/installer-tests.yml) executa `python -m unittest discover -s tests -v` em Windows e Linux com Python 3.10 e 3.12, além de macOS com Python 3.12, em pushes e Pull Requests. O workflow não adiciona dependências Python. Execute `python <skill-dir>/scripts/workspace.py --version` para identificar a versão do método; use a release ou o commit para identificar mudanças posteriores do instalador.
 
 [Releases](https://github.com/GuilhermeRocha0404/project-advisor/releases) registram versões e mudanças para usuários; o audit preserva evidências e decisões. Não há changelog separado.
 
 ## Estado, privacidade e limites
 
-O `AGENTS.md` instalado contém o método; `CLAUDE.md` o importa quando necessário. `.advisor-workspace.json` registra projeto, ambiente, versão e hashes dos arquivos gerenciados. `ADVISOR_STATE.md` guarda decisões privadas e progresso; o nome legado `CONSULTOR_STATE.md` pode ser preservado. Leia o estado antes de usar `--adopt-existing-state`. Guarde preferências em `ADVISOR_LOCAL.md`. Atualizações usam o mesmo comando de prévia/aplicação e recusam arquivos gerenciados modificados; revise e mescle personalizações explicitamente. O instalador nunca substitui um estado existente. A manutenção do estado continua dependente do modelo, sem hooks ou serviço em segundo plano. Documentação e testes do instalador não certificam execução em todos os ambientes.
+O `AGENTS.md` instalado contém o método; `CLAUDE.md` o importa quando necessário. `.advisor-workspace.json` registra projeto, ambiente, versão e hashes dos arquivos gerenciados. `ADVISOR_STATE.md` guarda decisões privadas e progresso; o nome legado `CONSULTOR_STATE.md` pode ser preservado. Guarde preferências em `ADVISOR_LOCAL.md`. A manutenção do estado depende do modelo, sem hooks ou serviço em segundo plano.
+
+Atualizações usam o mesmo comando de prévia/aplicação e recusam arquivos gerenciados modificados. O instalador nunca substitui um estado existente; leia-o antes de usar `--adopt-existing-state`. Novos estados POSIX solicitam permissão exclusiva do proprietário (`0600`); permissões de estados existentes são preservadas. Windows usa ACLs. Se a preparação parar antes da gravação do manifesto, siga a [recuperação de instalação interrompida](../../skills/project-advisor/references/HARNESSES.md#interrupted-first-install) para preservar o estado e revisar instruções órfãs antes de tentar novamente.
 
 ## Estrutura do repositório
 
@@ -98,10 +127,10 @@ Mantenha a documentação README somente em inglês e português do Brasil. A ve
 
 [MIT](../../LICENSE) — Copyright (c) 2026 Guilherme Rocha.
 
-## 2.1
+## Revisão da auditoria 2.1
 
-Revisão 2.1: o estado passa a registrar a origem das evidências e a reconciliar decisões substituídas, preservando restrições e verificações abertas. O instalador usa um esquema único, preserva o nome legado e melhora a recuperação de manifesto e trava. Não há comparação controlada que demonstre ganhos de qualidade, tempo ou custo. Adaptadores não comprovam execução real em cada ambiente; em chats sem arquivos, o método e o estado precisam ser fornecidos e salvos manualmente.
+O estado registra a origem das evidências e reconcilia decisões substituídas, preservando restrições e verificações abertas. O instalador compartilha um esquema único, preserva nomes legados nas atualizações, valida manifestos, explica a recuperação de travas obsoletas e recusa árvores sobrepostas entre skill e workspace. Estados existentes nunca são reinicializados.
 
 [Registro técnico em inglês](../../docs/AUDIT_2_1.md) · [Exemplos](../../skills/project-advisor/references/EXAMPLES.md)
 
-Inglês e português do Brasil são os idiomas mantidos para o README; inglês é a referência técnica. A tradução não recebeu revisão independente por falante nativo.
+Inglês é a referência técnica; a tradução para português não recebeu revisão independente por falante nativo.

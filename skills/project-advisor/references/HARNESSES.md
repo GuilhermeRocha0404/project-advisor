@@ -34,7 +34,19 @@ A malformed or missing manifest is not permission to initialize over existing in
 
 For a setup lock, check whether its PID belongs to an active setup. A PID alone is insufficient because it may be reused. Only after confirming the lock is stale, inspect partial writes and remove that lock. Never delete it automatically or delete state to make setup pass. Multi-file installation is not a single transaction.
 
-The local name consultor-codex is an optional legacy alias, not the public package name. Preserve its name/frontmatter and invocation metadata when updating an existing alias; the distributed package remains project-advisor.
+For an existing personal skill alias, preserve its name/frontmatter and invocation metadata during migration; the distributed package remains project-advisor.
+
+### Interrupted first install
+
+An interruption can leave instructions and state without a manifest. Refusal on retry protects those files; it does not mean the state should be reset.
+
+1. Confirm no setup process is active. If a lock remains, follow the stale-lock guidance above. Preserve a backup of the entire workspace outside that workspace.
+2. If a trusted manifest backup exists, recover it and review its binding and managed-file hashes. A mismatch still needs a manual merge; do not change hashes to force acceptance.
+3. Without a recoverable manifest, confirm the target project and intended harness. Read the existing state, including its final sections, to check for incomplete content. Recover damaged state from a trusted source before proceeding; the installer cannot determine its correctness.
+4. Compare orphaned `AGENTS.md` with `templates/AGENTS.md`, substituting the intended state filename for `{{STATE_FILE}}`. For Claude, also compare `CLAUDE.md` with the adapter `# Project Advisor workspace` followed by a blank line and `@AGENTS.md`. Preserve custom instructions and resolve any differences explicitly. Move only reviewed orphaned instruction files to the external backup; do not delete state or blindly remove instructions.
+5. Preview setup with the confirmed `--workspace`, `--project`, `--harness` and `--state-file`; add `--adopt-existing-state` when retaining state. Inspect the proposed changes, then repeat with `--apply`. Verify the recovered binding and that state bytes remain unchanged.
+
+The script never performs automatic repair or deletes these files. This procedure also applies to a missing manifest in an existing workspace, but absence of a manifest is not evidence that its instructions are disposable.
 
 Run installer checks with Python unittest. If the platform's default temporary directory is restricted, set ADVISOR_TEST_TMPDIR to an existing writable scratch directory; this does not require disabling the sandbox. Running on one OS does not establish cross-platform execution.
 
@@ -44,6 +56,6 @@ Claude Code/OpenCode adapter-file tests are not runtime tests in those products.
 
 ## File permissions
 
-The installer is intended for a private, single-user advisor workspace. On POSIX, mkstemp creates replacement instruction/manifest files with owner-only permissions (0600); replacement keeps that mode, including when updating a previously more permissive file. This conservative behavior is intentional. State creation follows the process umask, and existing state permissions are untouched; the installer does not enforce a uniform permission policy for all workspace files.
+The installer is intended for a private, single-user advisor workspace. On POSIX, mkstemp creates replacement instruction/manifest files with owner-only permissions (0600); replacement keeps that mode, including when updating a previously more permissive file. New state files are created with a requested mode of 0600 (the process umask may restrict it further). Existing state permissions and bytes are untouched, including on adoption and update. Folder permissions, local preferences and files subsequently written by the agent require an appropriate local privacy policy.
 
 Shared/container/WSL access across users requires an explicit local permission decision. Do not broaden access automatically. Windows access is governed by its ACLs. No cross-user runtime validation is claimed.

@@ -11,6 +11,15 @@ ROOT = Path(__file__).resolve().parents[1]
 VERSION = '2.1.1'
 MANIFEST = '.advisor-workspace.json'
 STATE_NAMES = ('ADVISOR_STATE.md', 'CONSULTOR_STATE.md')
+RECOVERY_GUIDANCE = (
+    ' If setup was interrupted or the manifest is missing, preserve all files and recover a trusted '
+    'manifest backup if available. Otherwise confirm the target project and inspect the state for '
+    'incomplete content. Compare unmanaged AGENTS.md/CLAUDE.md with the intended package files; '
+    'move only confirmed orphaned instruction files to a backup outside the workspace. '
+    'Then preview with --adopt-existing-state and the matching --state-file before using --apply. '
+    'Do not delete state or discard custom instructions. '
+    'See references/HARNESSES.md#interrupted-first-install.'
+)
 
 
 def read_manifest(path):
@@ -66,8 +75,6 @@ def prepare(args):
     if args.state_file not in STATE_NAMES:
         raise ValueError('Unsupported state filename.')
     if previous:
-        if previous.get('schema') != 1:
-            raise ValueError('Unsupported manifest schema.')
         if Path(previous['project']).resolve() != project:
             raise ValueError('Project binding differs. Use another workspace for another project. '
                              'For a moved checkout, verify its identity and explicitly review '
@@ -78,19 +85,21 @@ def prepare(args):
             raise ValueError('Harness change requires manual review of existing adapters.')
     state = workspace / args.state_file
     other = workspace / ('CONSULTOR_STATE.md' if args.state_file == 'ADVISOR_STATE.md' else 'ADVISOR_STATE.md')
-    if other.exists():
+    if other.exists() or other.is_symlink():
         raise ValueError('Another state exists. Resolve it explicitly; do not create competing states.')
     if state.is_symlink():
         raise ValueError('State cannot be a symlink.')
     if previous and not state.exists():
         raise ValueError('Existing workspace state is missing. Recover or review it explicitly before updating.')
     if state.exists() and not previous and not args.adopt_existing_state:
-        raise ValueError('Read and confirm the existing state/project, then use --adopt-existing-state.')
+        raise ValueError('Read and confirm the existing state/project, then use --adopt-existing-state.'
+                         + RECOVERY_GUIDANCE)
     if not state.exists() and any((workspace / name).exists() for name in
                                  ('ADVISOR_STATE_TEMPLATE.md', 'CONSULTOR_STATE_TEMPLATE.md')):
         raise ValueError('External template exists: initialize its state before setup; preserve the template.')
     for override in ('AGENTS.override.md', 'CLAUDE.local.md'):
-        if (workspace / override).exists():
+        override_path = workspace / override
+        if override_path.exists() or override_path.is_symlink():
             raise ValueError(f'Review existing {override} before setup.')
     # Universal newline reading intentionally produces UTF-8/LF on every platform.
     template = (ROOT / 'templates/AGENTS.md').read_text(encoding='utf-8')
@@ -113,12 +122,13 @@ def prepare(args):
             if old is None or digest(old) != previous['files'][name]:
                 raise ValueError(f'Local edits in {name}. Merge manually; keep custom rules in ADVISOR_LOCAL.md.')
         elif old is not None:
-            raise ValueError(f'Existing unmanaged {name}; review it before setup.')
+            raise ValueError(f'Existing unmanaged {name}; review it before setup.' + RECOVERY_GUIDANCE)
         if old != data:
             print(''.join(difflib.unified_diff(
                 (old or b'').decode('utf-8').splitlines(True),
                 data.decode('utf-8').splitlines(True), fromfile=f'{name} (current)', tofile=f'{name} (proposed)')))
-    if args.harness != 'claude' and (workspace / 'CLAUDE.md').exists():
+    claude_path = workspace / 'CLAUDE.md'
+    if args.harness != 'claude' and (claude_path.exists() or claude_path.is_symlink()):
         raise ValueError('Existing CLAUDE.md requires review; no adapter will be overwritten.')
     manifest = {'schema': 1, 'method_version': VERSION, 'project': str(project),
                 'harness': args.harness, 'state_file': args.state_file,
@@ -152,7 +162,8 @@ def prepare(args):
             if snapshots[name] != data:
                 atomic_write(workspace / name, data)
         if state_before is None:
-            with state.open('x', encoding='utf-8', newline='\n') as stream:
+            fd = os.open(state, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+            with os.fdopen(fd, 'w', encoding='utf-8', newline='\n') as stream:
                 stream.write(initial)
         atomic_write(manifest_path, (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
     finally:
@@ -162,6 +173,7 @@ def prepare(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--version', action='version', version=f'Project Advisor method {VERSION}')
     parser.add_argument('--workspace', required=True)
     parser.add_argument('--project', required=True)
     parser.add_argument('--harness', choices=('codex', 'claude', 'opencode'), required=True)
