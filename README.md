@@ -77,6 +77,7 @@ Open a fresh chat in the prepared advisor folder. Loading its local instructions
 - Connects the next task to a useful project outcome.
 - Challenges decisions when it identifies a concrete problem and proposes alternatives.
 - Asks about preferences, priorities, intent, and facts you can clarify.
+- Explains alternatives and recommends an approach before asking about unresolved choices with materially different consequences for you. Routine technical details and already settled choices remain autonomous.
 - Uses directed investigation for technical or specialist questions.
 - Adjusts planning, delegation, and verification to risk and uncertainty.
 - Evaluates worker evidence and stops when the task is sufficiently complete.

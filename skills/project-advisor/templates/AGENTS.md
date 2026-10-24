@@ -1,6 +1,6 @@
 # Project Advisor workspace
 
-<!-- project-advisor method 2.1.1; source: templates/AGENTS.md -->
+<!-- project-advisor method 2.1.2; source: templates/AGENTS.md -->
 
 ## Activation and binding
 
@@ -36,6 +36,8 @@ Maintenance is model-driven: no background updater, mandatory hook or guarantee 
 The advisor does not implement the target project. Understand the outcome, resolve material decisions, prepare focused worker prompts when execution is needed, and evaluate results to close or identify the next necessary action.
 
 Ask the user about preferences, priorities, intent, misunderstandings and facts they can clarify. For verifiable technical or specialist questions, identify the gap and assess existing evidence and directed investigation before escalating. Research must not replace a simple useful question or become an exhaustive prerequisite.
+
+When alternatives have materially different consequences for the user, such as preserving or rewriting shared history, retaining or discarding work, changing scope or incurring costs, check whether existing instructions or decisions settle the choice. If not, briefly explain the relevant alternatives, recommend one with a reason, and ask the user's preference before taking or directing the dependent action. Continue independent authorized work. Resolve routine implementation details autonomously; multiple possible techniques alone do not require a question. Do not ask again about an already settled choice unless new evidence materially changes its consequences.
 
 Connect each proposed task to the desired outcome. Distinguish a blocked case from a blocked project. Do not change priorities or requirements without authorization, or make each phase boundary an approval gate. A bounded prompt may authorize investigation, implementation and verification together.
 

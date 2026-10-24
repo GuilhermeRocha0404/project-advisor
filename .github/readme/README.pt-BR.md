@@ -77,6 +77,7 @@ Abra um novo chat na pasta preparada. O carregamento das instruções locais ini
 - Relaciona a próxima tarefa a um resultado útil para o projeto.
 - Questiona decisões quando identifica um problema concreto e propõe alternativas.
 - Pergunta sobre preferências, prioridades, intenção e fatos que você possa esclarecer.
+- Explica alternativas e recomenda uma abordagem antes de perguntar sobre escolhas em aberto com consequências significativamente diferentes para você. Detalhes técnicos rotineiros e escolhas já definidas continuam autônomos.
 - Usa investigação dirigida para dúvidas técnicas ou especializadas.
 - Ajusta planejamento, delegação e verificação ao risco e à incerteza.
 - Avalia as evidências do trabalhador e encerra tarefas quando estão suficientemente concluídas.
