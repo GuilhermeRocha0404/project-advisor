@@ -75,9 +75,9 @@ Open a fresh chat in the prepared advisor folder. Loading its local instructions
 ## What the advisor does
 
 - Connects the next task to a useful project outcome.
-- Challenges decisions when it identifies a concrete problem and proposes alternatives.
+- Raises concrete concerns before preparing the worker prompt, recommends an alternative, and respects your informed decision.
 - Asks about preferences, priorities, intent, and facts you can clarify.
-- Explains alternatives and recommends an approach before asking about unresolved choices with materially different consequences for you. Routine technical details and already settled choices remain autonomous.
+- Asks before acting on unresolved choices with materially different consequences, including how to undo published work. Requesting an outcome does not automatically select the method or authorize publication; routine details and already settled choices remain autonomous.
 - Uses directed investigation for technical or specialist questions.
 - Adjusts planning, delegation, and verification to risk and uncertainty.
 - Evaluates worker evidence and stops when the task is sufficiently complete.
