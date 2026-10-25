@@ -67,6 +67,42 @@ class WorkspaceTests(unittest.TestCase):
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.workspace.iterdir()})
         self.assertEqual(list(self.project.iterdir()), [])
 
+    def test_success_distinguishes_new_and_preserved_state(self):
+        created = self.run_setup('--apply')
+        self.assertEqual(created.returncode, 0, created.stderr)
+        self.assertIn('New state was created.', created.stdout)
+        self.assertNotIn('Existing state was not rewritten.', created.stdout)
+        before = self.snapshot()
+        updated = self.run_setup('--apply')
+        self.assertEqual(updated.returncode, 0, updated.stderr)
+        self.assertIn('Existing state was not rewritten.', updated.stdout)
+        self.assertNotIn('New state was created.', updated.stdout)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_interruption_before_state_reports_orphan_and_lock_without_writes(self):
+        self.workspace.mkdir()
+        agents = self.workspace / 'AGENTS.md'
+        agents.write_bytes(b'Interrupted instruction write; review before recovery.\n')
+        lock = self.workspace / '.advisor-setup.lock'
+        lock.write_bytes(b'unknown process')
+        before = self.snapshot()
+        result = self.run_setup('--apply')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Existing unmanaged AGENTS.md', result.stderr)
+        self.assertIn('.advisor-setup.lock', result.stderr)
+        self.assertIn('If no state exists', result.stderr)
+        self.assertIn('without the adoption flag', result.stderr)
+        self.assertEqual(self.snapshot(), before)
+        # Simulate the documented, manually reviewed recovery in this fixture.
+        backup = self.root / 'reviewed-orphan.md'
+        agents.rename(backup)
+        lock.unlink()
+        result = self.run_setup('--apply')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('New state was created.', result.stdout)
+        self.assertTrue((self.workspace / 'ADVISOR_STATE.md').exists())
+        self.assertEqual(backup.read_bytes(), before['AGENTS.md'][1])
+
     def test_preserves_legacy_state_and_personal_rules(self):
         self.workspace.mkdir()
         state = self.workspace / 'CONSULTOR_STATE.md'

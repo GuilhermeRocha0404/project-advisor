@@ -13,12 +13,14 @@ MANIFEST = '.advisor-workspace.json'
 STATE_NAMES = ('ADVISOR_STATE.md', 'CONSULTOR_STATE.md')
 RECOVERY_GUIDANCE = (
     ' If setup was interrupted or the manifest is missing, preserve all files and recover a trusted '
-    'manifest backup if available. Otherwise confirm the target project and inspect the state for '
-    'incomplete content. Compare unmanaged AGENTS.md/CLAUDE.md with the intended package files; '
+    'manifest backup if available. Check whether .advisor-setup.lock belongs to an active setup; '
+    'remove it only after confirming it is stale and reviewing partial writes. '
+    'Compare unmanaged AGENTS.md/CLAUDE.md with the intended package files; '
     'move only confirmed orphaned instruction files to a backup outside the workspace. '
-    'Then preview with --adopt-existing-state and the matching --state-file before using --apply. '
-    'Do not delete state or discard custom instructions. '
-    'See references/HARNESSES.md#interrupted-first-install.'
+    'Confirm the target project. If state exists, inspect it for incomplete content and preview with '
+    '--adopt-existing-state and the matching --state-file. If no state exists, preview a fresh setup '
+    'without the adoption flag. Review the preview before --apply. Do not delete state or discard '
+    'custom instructions. See references/HARNESSES.md#interrupted-first-install.'
 )
 
 
@@ -168,7 +170,8 @@ def prepare(args):
         atomic_write(manifest_path, (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
     finally:
         lock.unlink()
-    print('Workspace prepared. Existing state was not rewritten. Verify loading in a fresh session.')
+    state_result = 'New state was created.' if state_before is None else 'Existing state was not rewritten.'
+    print(f'Workspace prepared. {state_result} Verify loading in a fresh session.')
 
 
 def main():

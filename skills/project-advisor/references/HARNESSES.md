@@ -38,13 +38,13 @@ For an existing personal skill alias, preserve its name/frontmatter and invocati
 
 ### Interrupted first install
 
-An interruption can leave instructions and state without a manifest. Refusal on retry protects those files; it does not mean the state should be reset.
+An interruption can leave instructions, with or without state, and a stale lock without a manifest. Refusal on retry protects those files; it does not mean the state should be reset.
 
 1. Confirm no setup process is active. If a lock remains, follow the stale-lock guidance above. Preserve a backup of the entire workspace outside that workspace.
 2. If a trusted manifest backup exists, recover it and review its binding and managed-file hashes. A mismatch still needs a manual merge; do not change hashes to force acceptance.
-3. Without a recoverable manifest, confirm the target project and intended harness. Read the existing state, including its final sections, to check for incomplete content. Recover damaged state from a trusted source before proceeding; the installer cannot determine its correctness.
+3. Without a recoverable manifest, confirm the target project and intended harness. If state exists, read it, including its final sections, to check for incomplete content. If no state was created, there is no state to adopt. Recover damaged state from a trusted source before proceeding; the installer cannot determine its correctness.
 4. Compare orphaned `AGENTS.md` with `templates/AGENTS.md`, substituting the intended state filename for `{{STATE_FILE}}`. For Claude, also compare `CLAUDE.md` with the adapter `# Project Advisor workspace` followed by a blank line and `@AGENTS.md`. Preserve custom instructions and resolve any differences explicitly. Move only reviewed orphaned instruction files to the external backup; do not delete state or blindly remove instructions.
-5. Preview setup with the confirmed `--workspace`, `--project`, `--harness` and `--state-file`; add `--adopt-existing-state` when retaining state. Inspect the proposed changes, then repeat with `--apply`. Verify the recovered binding and that state bytes remain unchanged.
+5. Preview setup with the confirmed `--workspace`, `--project`, `--harness` and `--state-file`; add `--adopt-existing-state` only when retaining state; omit it when no state exists. Inspect the proposed changes, then repeat with `--apply`. Verify the recovered binding and that state bytes remain unchanged.
 
 The script never performs automatic repair or deletes these files. This procedure also applies to a missing manifest in an existing workspace, but absence of a manifest is not evidence that its instructions are disposable.
 

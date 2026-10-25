@@ -86,3 +86,14 @@ Regression tests now exercise interrupted setup/recovery, symlink destinations, 
 CI adds one macOS/Python 3.12 job to the existing Windows/Linux matrix. Consult the [CI runs](https://github.com/GuilhermeRocha0404/project-advisor/actions/workflows/installer-tests.yml) for execution outcomes and skips; configuring a job alone is not execution evidence. Skill metadata validation, 20 relative links/anchors and matching README commands were checked locally. The first metadata-validator attempt could not load PyYAML correctly in the sandbox; the authorized retry with the same local dependency passed.
 
 Public setup documentation includes a synthetic first handoff and generalizes maintainer-local context. Runtime loading in Claude Code/OpenCode, sustained handoffs after compaction and independent native-language review remain unverified. Automatic repair, a separate check mode, a linter and a plan/application refactor are deferred until a concrete need justifies them.
+
+
+## Preference and recovery clarification 2.1.3 (2026-10-25)
+
+The method clarifies that recommending is not asking and that an outcome request does not itself select a consequential method or authorize publication. Previously settled decisions remain valid. Concrete objections should precede the worker prompt that would implement the disputed direction; informed decisions are respected.
+
+The wording draws on a prior limited synthetic comparison: a more explicit candidate asked before target mutations in five of five incident-like cases, with no excessive-question threshold reached in its controls. Explanations were incomplete in some cases and one control did not execute. The released wording is revised, not the exact tested candidate. No new behavioral sessions were run and no effectiveness guarantee is claimed. Private preferences and test fixtures are not part of this distribution.
+
+Installer messages distinguish newly created from preserved state and describe interrupted recovery both with and without state, including a possible stale lock. No automatic repair, deletion, permission change or rebinding was added. Two regression tests cover success output and a constructed orphan/lock/no-state fixture with preservation and manual recovery; this is not a new process-kill experiment.
+
+Local test attempts were blocked by Windows temporary-directory access errors during fixture setup, including in a dedicated workspace scratch directory. They do not establish installer failure or a passing suite. The optional skill metadata validator could not run because PyYAML was unavailable; no dependency was installed. Release validation uses the existing CI matrix, with outcomes recorded in the release notes. English and Brazilian Portuguese README changes were reviewed together. Historical evidence above retains its original scope.
